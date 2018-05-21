@@ -1,1 +1,7 @@
 theme: jekyll-theme-cayman
+site: 
+  - title: Has AlTaiar
+  - description: Rambling of an old man on software, life, and stuff
+  - twitter: http://twitter.com
+  - linkedin: http://linkedin.com
+  - contact: http://forms.google.com
