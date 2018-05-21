@@ -16,3 +16,12 @@
     border-style: solid;
     width: 150px;
   }
+
+  a h1 {
+    color: white;  
+  }
+
+  a:hover h1 {
+    text-transform: none;
+    text-decoration: none;
+  }
