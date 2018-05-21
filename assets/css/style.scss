@@ -1,0 +1,18 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.post-summary {
+   margin-bottom: 25px;
+ }
+ 
+.profile-img {
+   float: left;
+    margin: 0 auto;
+    border-radius: 50%;
+    border-color: #3594fd;
+    border-width: 3px;
+    border-style: solid;
+    width: 150px;
+  }
