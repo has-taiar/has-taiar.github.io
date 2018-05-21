@@ -6,4 +6,13 @@ layout: page
 permlink: contact.html
 ---
 
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfPe3a3V3hfd8gMEUaPZmsV2iv-2kYhmuquGG0QAwswu1Kqwg/viewform?embedded=true" width="600" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+<div class="contact-form"> 
+  
+  <form method="POST" action="https://formspree.io/has.altaiar@gmail.com">
+    <input type="text" name="name" placeholder="Your name">
+    <input type="email" name="email" placeholder="Your email">
+    <textarea name="message" placeholder="Your message"></textarea>
+    <button type="submit">Send</button>
+</form>
+
+</div> 
