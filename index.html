@@ -4,3 +4,11 @@ layout: default
 
 <p>Welcome to my humble website. I am still building it through, so bear with me :) </p>
 
+
+
+<ul>
+  {% for post in site.posts %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+
