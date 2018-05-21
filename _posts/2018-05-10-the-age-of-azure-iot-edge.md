@@ -3,7 +3,7 @@ id: 4218
 title: The Age of Azure IoT Edge
 date: 2018-05-10T14:22:47+00:00
 author: has
-layout: default
+layout: post
 guid: https://www.hasaltaiar.com.au/?p=4218
 permalink: /the-age-of-azure-iot-edge/
 categories:
