@@ -48,5 +48,19 @@ button, input, select, textarea {
     font-family: inherit;
     font-size: 100%;
     vertical-align: baseline;
-    margin: 0px;
+}
+
+form button, form a.button {
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgb(53, 145, 115);
+    line-height: 1em;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(53, 145, 115);
+    border-image: initial;
+    background: transparent;
+    padding: 0.6em 0.9em;
+    transition: all 0.3s ease-in-out;  
 }
