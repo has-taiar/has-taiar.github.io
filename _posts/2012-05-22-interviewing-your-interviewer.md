@@ -1,11 +1,10 @@
 ---
 id: 4085
-title: Interview your interviewer
+title: Interviewing your interviewer
 date: 2012-05-22T11:34:14+00:00
 author: has
 layout: post
-guid: http://taytechs.com/blog/?p=1
-permalink: /hello-world-2/
+permalink: /interviewing-your-interviewer/
 categories:
   - Employability
   - Leadership
