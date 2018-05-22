@@ -15,12 +15,14 @@ layout: default
 <p>Here's a list of my recent post. You might want to filter them by categories or tags  </p>
 
   {% for post in site.posts %}
-    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-    {% if post.excerpt %}
-      <p class="post-summary">
-        {{ post.excerpt }}
-      </p>
-      <hr>
-     {% endif %}
+    <div class="post-summary">  
+      <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+        {% if post.excerpt %}
+          <p>
+            {{ post.excerpt }}
+          </p>
+          <hr>
+        {% endif %}
+    </div>
   {% endfor %}
 
