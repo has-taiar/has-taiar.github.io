@@ -15,7 +15,7 @@ tags:
   - Cloud
   - MachineLearning
 ---
-<img src="/wp-content/uploads/2018/05/has-iot.jpg" alt="Has AlTaiar @ Melbourne Azure Nights" height="500" /> <br />
+<img src="/wp-content/uploads/2018/05/has-iot.jpg" alt="Has AlTaiar @ Melbourne Azure Nights" /> <br />
 <span>Thanks Affix for taking/producing this photo on the night :) </span>
 
 Azure IoT Edge is a great offering by Microsoft that simplifies building, deploying, and monitoring code modules for IoT Edge devices. Last night I gave a talk at Melbourne Azure meetup about Azure IoT Edge. I have put the slides here for anybody who is interested.
