@@ -17,7 +17,7 @@ tags:
 ---
 Azure IoT Edge is a great offering by Microsoft that simplifies building, deploying, and monitoring code modules for IoT Edge devices. Last night I gave a talk at Melbourne Azure meetup about Azure IoT Edge. I have put the slides here for anybody who is interested.
 
-<img src="/wp-content/uploads/2018/05/has-iot.png" alt="Has AlTaiar @ Melbourne Azure Nights" height="500" />
+<img src="/wp-content/uploads/2018/05/has-iot.jpg" alt="Has AlTaiar @ Melbourne Azure Nights" height="500" />
 
 The talk mostly cover the following points:
 
