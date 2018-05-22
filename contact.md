@@ -13,7 +13,7 @@ permlink: contact.html
     <input type="email" name="email" placeholder="Your email">
     <textarea name="message" placeholder="Your message"></textarea>
     <input type="hidden" name="_next" value="https://www.hasaltaiar.com.au/thanks.html" />
-    <input type="hidden" name="_subject" value=Blog - Contact form submission" />
+    <input type="hidden" name="_subject" value="Blog - Contact form submission" />
     <button type="submit">Send</button>
 </form>
 
