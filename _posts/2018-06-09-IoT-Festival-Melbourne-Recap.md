@@ -16,8 +16,6 @@ tags:
 <img src="/wp-content/uploads/2018/06/iot-festival-melbourne.jpg" alt="Iot Festival Melbourne - 2018"><br />
 <span>Iot Festival Melbourne - 2018</span>
 
-# Recap of IoT Festival 2018
-
 The IoT Festival is a yearly event that takes place in Melbourne, Australia and brings together the best minds and brands of IoT in Australia and New Zealand. I was lucky enough to attend this year's, which was last Monday. Here's a summary of what I learnt by attending the festival yesterday. 
 
 <blockquote><p>Augmented Reality is the UI for IIoT<br />Dr. Leila Alem - Arc Sense</p></blockquote>
