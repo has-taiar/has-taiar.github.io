@@ -13,7 +13,7 @@ tags:
   - IoTEdge
 ---
 
-<img src="/wp-content/uploads/2018/06/iot-festival-melbourne.jpg" alt="Iot Festival Melbourne - 2018">
+<img src="/wp-content/uploads/2018/06/iot-festival-melbourne.jpg" alt="Iot Festival Melbourne - 2018"><br />
 <span>Iot Festival Melbourne - 2018</span>
 
 # Recap of IoT Festival 2018
