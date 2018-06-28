@@ -26,7 +26,7 @@ Please do not feel bad, this is not my purpose and I am certainly like you when 
 
 Interestingly, most people, myself included, think that well it's the wealthy people who should be donating and it's true. What we do not realise that most-likely, if you are reading this post, you live in a one of the OECD countries, then chances are you are in the top 2-5% wealthiest people on earth. I can see your jaw just dropped :) before saying anything, bear with me. 
 
-<img src="wp-content/uploads/2018/06/wealth-disto.PNG" alt="Wealth Distribution" /><br />
+<img src="wp-content/uploads/2018/06/wealth-distro.PNG" alt="Wealth Distribution" /><br />
 <span>Figure 1: Wealth Distribution (Source: The source of the data is from World Bank, and [this post](https://80000hours.org/2017/04/how-accurately-does-anyone-know-the-global-distribution-of-income/) explains the details.</span>
 
 [This post](https://80000hours.org/2017/04/how-accurately-does-anyone-know-the-global-distribution-of-income/) which was written by analysts from Oxford looked at the distribution of wealth around the world. I have borrowed their diagram here (See figure 1 above). You can see that most people are earning very little, in fact the majority earns well below the US$2000 per year. In my social circle, where I live, most people on average earn $80,000 or more. This makes us the wealthiest in the world.
