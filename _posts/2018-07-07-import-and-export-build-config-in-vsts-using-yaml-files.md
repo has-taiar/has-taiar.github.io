@@ -15,7 +15,7 @@ tags:
 
 Visual Studio Online (VSTS) has a great feature that allows users to use YAML files for exporting or defining their builds. This feature was introduced not long ago, you can find lots of documentation [here](https://docs.microsoft.com/en-us/vsts/pipelines/build/yaml?view=vsts). 
 
-## Why both using YAML?
+## Why use YAML?
 First, A few reasons for why you should use YAML files for defining your builds: 
 
 - It gives a great insight on the health of the build pipeline. You can see who made a change, what change, and at what point in time. This is essential for ensuring a healthy build pipeline. 
@@ -25,7 +25,7 @@ First, A few reasons for why you should use YAML files for defining your builds:
 Let me explain, assume you have done some work on a particular project. I do work for many clients, and when I start developing I just use my VSTS account and Azure subscription to get things done quickly. When the project finished, we hand over the code and all other artefacts to the client. 
 Before the support of YAML, you would have to re-create the build manually step-by-step on the new VSTS account. However, now you can use YAML to export your build config and import this YAML on the other (client's) VSTS account. 
 
-Here is a great comparison from the docs on how does using YAML compares with using the web portal (https://docs.microsoft.com/en-us/vsts/pipelines/build/yaml?view=vsts#how-do-yaml-builds-compare-to-web-interface-builds)
+Here is a great comparison from the docs on how does using YAML compares with using the web portal (from the [VSTS docs](https://docs.microsoft.com/en-us/vsts/pipelines/build/yaml?view=vsts#how-do-yaml-builds-compare-to-web-interface-builds))
 
 The docs in the link above go into great details on how you can create, import, and export build configs using YAML, so I am not going to repeat that. Instead, I will share some of the issues that I faced when started using the YAML feature. 
 
