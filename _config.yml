@@ -1,6 +1,7 @@
 theme: jekyll-theme-cayman
 title: Has AlTaiar
 description: Rambling of an old man on software, life, and stuff
+google_analytics: UA-121904616-1
 # url: "https://www.hasaltaiar.com.au" 
 plugins:
   - jekyll-sitemap
