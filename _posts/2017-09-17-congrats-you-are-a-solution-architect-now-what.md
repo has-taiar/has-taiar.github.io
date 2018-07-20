@@ -25,11 +25,16 @@ tags:
   - Public Speaking
   - solutions design
 ---
+## Update Nov 2017
+DDDPerth has published the recording of my session, so I am embedding it here for completeness :) 
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/yikSzz9l2qU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 Last week, I was fortunate enough to speak at <a href="https://dddperth.com/" target="_blank">DDDPerth</a>, which was a great conference and awesome and engaged audience. There were about ~ 350 people attending, with the amazing help of the organisers and volunteers. Here is the link to my slides, and I would love to hear your feedback: 
 
 
 
-The feedback I got from people attended the conference was very positive 20 Green + 4 Yellow. Not bad, and I am happy with that. I loved the feedback provided by the yellow feedback submissions, and I will hope to improve my skills and my presentations for future conferences. 
+The feedback I got from people who attended the conference was very positive 20 Green + 4 Yellow. Not bad, and I am happy with that. I loved the feedback provided. All was constructive and supportive, and I will hope to improve my skills and my presentations for future conferences. 
 
 The 2 demos I did on the day were 2 parts. 
 
