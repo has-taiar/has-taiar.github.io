@@ -5,7 +5,7 @@ date: 2014-01-13T14:50:10+00:00
 author: has
 layout: post
 permalink: /push-notifications-to-all-platforms-using-a-web-api-c-and-net/
-categories:
+tags:
   - .NET
   - Android
   - CSharp
