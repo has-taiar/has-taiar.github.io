@@ -1,15 +1,14 @@
 ---
 id: 431
-title: 'Push Notifications to all platforms using a web Api (c# and .Net)'
+title: Push Notifications to all platforms using a web Api (C# and .Net)
 date: 2014-01-13T14:50:10+00:00
 author: has
 layout: post
-guid: http://www.hasaltaiar.com.au/?p=431
 permalink: /push-notifications-to-all-platforms-using-a-web-api-c-and-net/
 categories:
   - .NET
   - Android
-  - 'C#'
+  - CSharp
   - Cloud
   - Code Quality
   - iOS
