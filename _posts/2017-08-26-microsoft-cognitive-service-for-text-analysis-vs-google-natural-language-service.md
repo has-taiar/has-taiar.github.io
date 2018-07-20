@@ -26,7 +26,7 @@ tags:
 
 I am trying to evaluate a number of service offering in the context of natural language processing, my starting point here is to compare Microsoft Text Analytics service with its Google counterpart (Google Natural Language service). This post is the first of a series that would cover natural language processing from multiple cloud providers. 
 
-# Microsoft Cognitive Service &#8211; Text Analytics
+# Microsoft Cognitive Service & Text Analytics
 
 Microsoft Azure offers a number pre-baked services that could help developers and organisation with anything related to recognising images, classifying, or analysing text. The one we are interested in here is the Azure <a href="https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/" target="_blank">Text Analytics service</a>, which is currently in Preview. This service offer the following apis: 
 
@@ -160,7 +160,7 @@ I am using these hotel review that we found online. Here we have the review, the
     </td>
     
     <td>
-      Travelled Solo. Stayed in a 2 bedroom apartment. Very small. It not cleaned much at all. The walls were dirty and the mattress had a dirty stain on it which could be clearly seen through the sheet.Â There was also an opened packet of maltesers still on the bench from the previous guests. Definitely wont stay here again.
+      Travelled Solo. Stayed in a 2 bedroom apartment. Very small. It not cleaned much at all. The walls were dirty and the mattress had a dirty stain on it which could be clearly seen through the sheet.Ã‚ There was also an opened packet of maltesers still on the bench from the previous guests. Definitely wont stay here again.
     </td>
     
     <td>
