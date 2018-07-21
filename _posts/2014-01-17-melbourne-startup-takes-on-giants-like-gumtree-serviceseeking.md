@@ -11,7 +11,8 @@ categories:
   - 'C#'
   - Smart Living
 ---
-<figure id="attachment_471" style="width: 50px" class="wp-caption alignleft">[<img class="size-full wp-image-471" alt="Room For Improvement Logo" src="https://i1.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2014/01/Rfi-logo.png?resize=50%2C49" width="50" height="49" data-recalc-dims="1" />](https://i1.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2014/01/Rfi-logo.png)<figcaption class="wp-caption-text">Room For Improvement Logo</figcaption></figure> 
+<img class="size-full wp-image-471" alt="Room For Improvement Logo" src="https://www.hasaltaiar.com.au/wp-content/uploads/2014/01/Rfi-logo.png" width="50" height="49" data-recalc-dims="1" /><br />
+<span>Room For Improvement Logo</figcaption></span> 
 
 This is our first Press Release for <a href="http://www.roomforimprovement.com.au" target="_blank">RFI</a>, would love to receive any feedback.
 
