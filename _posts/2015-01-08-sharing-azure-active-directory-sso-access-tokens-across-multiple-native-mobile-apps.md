@@ -4,8 +4,7 @@ title: Sharing Azure Active Directory SSO access tokens across multiple native m
 date: 2015-01-08T08:28:59+00:00
 author: has
 layout: post
-guid: http://www.hasaltaiar.com.au/?p=2911
-permalink: /sharing-azure-active-directory-sso-access-tokens-across-multiple-native-mobile-apps-2/
+permalink: /sharing-azure-active-directory-sso-access-tokens-across-multiple-native-mobile-apps/
 categories:
   - .NET
   - Android
@@ -42,7 +41,7 @@ Most enterprises have more than one mobile app and it&#8217;s not unusual for th
 
 This post will cover how to share access tokens to AAD resources _across multiple mobile apps_. This is very useful if the enterprise (or any mobile app vendor) wants to provide convenience for the users by not asking them to authenticate on every mobile app the user has.
 
-Once a mobile user logs into Azure AD and gets a token we want to reuse the same token with other apps. This is suitable for some scenarios, but it might not be ideal for apps and resources that deal with sensitive data &#8211; the judgement is yours.
+Once a mobile user logs into Azure AD and gets a token we want to reuse the same token with other apps. This is suitable for some scenarios, but it might not be ideal for apps and resources that deal with sensitive data, the judgement is yours.
 
 ### Sharing Tokens Across Multiple Mobile Apps
 
@@ -199,7 +198,7 @@ Similar to the previous option, but offer more flexibility. This is a very good 
 
 ### Other Local Means
 
-There are many other options that are available for storing and sharing data between apps on iOS. We could create a reminder, a contact, etc. Many of these entries could even be hidden from the user. For instance, &#8220;DONE&#8221; reminders are hidden from the Reminders app list. So we would need to to worry about the keys visibility, but I would still warn you to thing 10 times before go into storing your keys this way. 
+There are many other options that are available for storing and sharing data between apps on iOS. We could create a reminder, a contact, etc. Many of these entries could even be hidden from the user. For instance, "DONE" reminders are hidden from the Reminders app list. So we would need to to worry about the keys visibility, but I would still warn you to thing 10 times before go into storing your keys this way. 
 
 ### Words of Warning
 
@@ -207,7 +206,7 @@ There are many other options that are available for storing and sharing data bet
 
 Developers need to understand **Bearer Tokens** when using Azure AD authentication. Bearer Tokens mean anybody who has the token (bearer of the token) could access and interact with your AAD resource. This offers high flexibility but it could also be a security risk if your key was exposed somehow. This needs to be thought of when implementing any token sharing mechanism. 
 
-#### iOS SecKeyChain is &#8220;Secure&#8221;
+#### iOS SecKeyChain is "Secure"
 
 iOS SecKeyChain is &#8220;Secure&#8221;, right? No, not at all. Apple calls it secure, but on jail-broken devices, you could see the key store as a normal file. Thus, I would highly recommend encrypting these access tokens and any key that you might want to store before persisting it. The same goes for iCloud, Azure, or any of the other approaches we went through above. 
 
