@@ -5,7 +5,7 @@ date: 2014-12-10T13:40:15+00:00
 author: has
 layout: post
 guid: http://www.hasaltaiar.com.au/?p=2831
-permalink: /using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps
+permalink: /using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps/
 categories:
   - .NET
   - Android
