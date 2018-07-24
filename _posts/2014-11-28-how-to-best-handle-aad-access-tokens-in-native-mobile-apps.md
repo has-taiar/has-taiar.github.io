@@ -5,7 +5,7 @@ date: 2014-11-28T15:00:51+00:00
 author: has
 layout: post
 guid: http://www.hasaltaiar.com.au/?p=2651
-permalink: /how-to-best-handle-aad-access-tokens-in-native-mobile-apps-2/
+permalink: /how-to-best-handle-aad-access-tokens-in-native-mobile-apps/
 categories:
   - .NET
   - Android
