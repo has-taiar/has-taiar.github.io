@@ -32,7 +32,7 @@ This blog post is the second in a series that cover Azure Active Directory SSO A
   3. [Using Azure SSO tokens for Multiple AAD Resources From Native Mobile Apps](http://www.hasaltaiar.com.au/using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps/)
   4. [Sharing Azure SSO access tokens across multiple native mobile apps.](http://www.hasaltaiar.com.au/sharing-azure-active-directory-sso-access-tokens-across-multiple-native-mobile-apps/)
 
-In the <a href="http://www.hasaltaiar.com.au/implementing-azure-active-directory-single-sign-on-in-xamarin-ios-apps/" target="_blank">previous post</a>, we talked about authenticating mobile app users using Azure AD SSO. In this post, we explore how to take this login further to persist the access token to interact with Azure AD. Let&#8217;s assume that we have a web api app and a mobile app that consumes this web api. In order to secure this interaction between our mobile app and the web api, we could register both apps with Azure AD and let Azure handle the authentication for us. Azure AD is well suited for such tasks and it could sync to your on-premise AD too. This makes it very suitable for enterprise-like apps. 
+In the <a href="http://www.hasaltaiar.com.au/implementing-azure-active-directory-single-sign-on-in-xamarin-ios-apps/" target="_blank">previous post</a>, we talked about authenticating mobile app users using Azure AD SSO. In this post, we explore how to take this login further to persist the access token to interact with Azure AD. Let's assume that we have a web api app and a mobile app that consumes this web api. In order to secure this interaction between our mobile app and the web api, we could register both apps with Azure AD and let Azure handle the authentication for us. Azure AD is well suited for such tasks and it could sync to your on-premise AD too. This makes it very suitable for enterprise-like apps. 
 
 ## Securing the Web App
 
@@ -46,7 +46,8 @@ In the previous post, we talked about how we could use Azure AD along with Micro
 
 We have seen how to secure our apps with AAD, now we need to authorise the mobile app to access our Web App in AAD. To do this, we first need to _expose the webApi permissions_ on Azure AD. We can navigate to AAD/Applications/our-web-app, then click on _download manifest_. This will give us a copy of the configuration of this app in AAD (simple Json file). We need to modify the permission section. We just need to add the following section to tell Azure AD that this web app can be accessed by other AAD apps. <figure id="attachment_2691" style="width: 300px" class="wp-caption aligncenter">
 
-[<img src="https://i0.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2014/11/AAD-app-manifest-configuration-300x217.png?resize=300%2C217" alt="AAD app manifest configuration" width="300" height="217" class="size-medium wp-image-2691" data-recalc-dims="1" />](https://i2.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2014/11/AAD-app-manifest-configuration.png)<figcaption class="wp-caption-text">AAD app manifest configuration</figcaption></figure> 
+<img src="https://www.hasaltaiar.com.au/wp-content/uploads/2014/11/AAD-app-manifest-configuration-300x217.png" alt="AAD app manifest configuration" width="300" height="217" />
+<br /><span>AAD app manifest configuration</span> 
 
 <pre class="brush: jscript; title: ; notranslate" title="">appPermissions": [
     {
@@ -74,7 +75,8 @@ We can update the manifest file then upload it. Azure will verify the file and u
 
 Now, we need to configure our native mobile app in Azure AD to have access to our web api app. This is very simple as in the screenshot below. In the list of permissions on the left, now we have more permissions that we can grant to the mobile app. Whatever name you gave to your app would appear there along with the type of permissions that you have configured. In my case, I have named it MobileServices1 and that is what is appearing there. <figure id="attachment_2701" style="width: 300px" class="wp-caption aligncenter">
 
-[<img src="https://i2.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2014/11/Azure-AD-app-permission-settings-300x124.png?resize=300%2C124" alt="Azure AD app permission settings" width="300" height="124" class="size-medium wp-image-2701" data-recalc-dims="1" />](https://i2.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2014/11/Azure-AD-app-permission-settings.png)<figcaption class="wp-caption-text">Azure AD app permission settings</figcaption></figure> 
+<img src="https://www.hasaltaiar.com.au/wp-content/uploads/2014/11/Azure-AD-app-permission-settings-300x124.png" alt="Azure AD app permission settings" width="300" height="124" /><br />
+<span>Azure AD app permission settings</span> 
 
 Azure now knows to allow access from our native mobile app to the web app. 
 
