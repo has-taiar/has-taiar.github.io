@@ -19,10 +19,10 @@ One limitation of the Azure IoT Edge is that it currently does not support opera
 # Finding the problem
 The first challenge was finding where the problem was, I setup my Docker to use my proxy settings and changed my IoT Edge runtime config to have the proxy settings as below: 
 
-<img src="/wp-content/uploads/2018/08/docker-proxy-settings.png" alt="Docker settings to support firewall" /> <br />
+<img src="/wp-content/uploads/2018/08/docker-proxy-settings.PNG" alt="Docker settings to support firewall" /> <br />
 <span>Docker settings to support firewall</span>
 
-<img src="/wp-content/uploads/2018/08/iot-edge-config.png" alt="Location of IoT Edge config file" /> <br />
+<img src="/wp-content/uploads/2018/08/iot-edge-config.PNG" alt="Location of IoT Edge config file" /> <br />
 <span>Location of IoT Edge config file</span>
 
 ```
@@ -42,11 +42,11 @@ agent:
 However, that did not fix the problem. To make things more difficult, the docs do not mention anything about operating behind a proxy. 
 After some investigation, I took this conversation to the Azure IoT Edge dev team on GitHub, can find the details [here](https://github.com/Azure/iotedge/issues/5) 
 
-# The Problem
+# Defining The Problem
 It turned out that the problem is worse than I expected. The lack of support for Proxy was not just a limitation in the IoT Edge. It was due to lake of proxy support in the SDK libraries as it can be seen in the conversation with the IoT Edge product team. 
 There is no way to get around this unless the SDK libraries implement support for proxy settings, then the IoT Edge product team can adopt this change on their end too. 
 
-#The Solution
+# The Solution
 While all this may take time, I need a solution urgently, and hence we have the solution below :) 
 We concluded that the solution was to exempt the IoT Hub traffic from our proxy. However, punching a hole in the firewall would not appeal to any Infrastructure team. Thus, to solve the problem with minimal security impact, we did the following: 
 - Open port 443 (https) on the IoT Edge machine (outbound) 
