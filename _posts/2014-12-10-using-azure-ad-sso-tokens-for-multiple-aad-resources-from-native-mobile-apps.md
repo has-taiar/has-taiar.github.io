@@ -5,7 +5,7 @@ date: 2014-12-10T13:40:15+00:00
 author: has
 layout: post
 guid: http://www.hasaltaiar.com.au/?p=2831
-permalink: /using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps-2/
+permalink: /using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps/
 categories:
   - .NET
   - Android
@@ -36,7 +36,7 @@ This blog post is the third in a series that cover Azure Active Directory Single
 
 In an enterprise context, it is highly likely that you would have multiple web services that your native mobile app needs to consume. I had exactly this scenario, where one of my clients had asked if they could maintain the same token in the background in the mobile app to use it for accessing multiple web services. I spent some time digging through the documentation and conducting some experiments to confirm some points. Therefore, this post is to share my findings on accessing multiple Azure AD resources from native mobile apps using ADAL.
 
-In the previous two posts, we looked at [implementing Azure AD SSO login on native mobile apps](http://www.hasaltaiar.com.au/how-to-best-handle-aad-access-tokens-in-native-mobile-apps/ "Implementing Azure Active Directory SSO (Single Sign on) in Xamarin iOS apps"), then we looked at <a href="http://www.hasaltaiar.com.au/how-to-best-handle-aad-access-tokens-in-native-mobile-apps/" title="How to best handle azure AD access-tokens on native mobile apps" target="_blank">how to best maintain these access tokens</a>. This post discusses how to use Azure AD SSO tokens to manage access to **multiple** AAD resources. Let&#8217;s assume that we have 2 web services sitting in Azure (ie WebApi1, and WebApi2), both of which are set to use Azure AD authentication. Then, we have the native mobile app, which needs access to both web services (WebApi1, and WebApi2). Let&#8217;s look at what we can and cannot do. 
+In the previous two posts, we looked at [implementing Azure AD SSO login on native mobile apps](http://www.hasaltaiar.com.au/how-to-best-handle-aad-access-tokens-in-native-mobile-apps/ "Implementing Azure Active Directory SSO (Single Sign on) in Xamarin iOS apps"), then we looked at <a href="http://www.hasaltaiar.com.au/how-to-best-handle-aad-access-tokens-in-native-mobile-apps/" title="How to best handle azure AD access-tokens on native mobile apps" target="_blank">how to best maintain these access tokens</a>. This post discusses how to use Azure AD SSO tokens to manage access to **multiple** AAD resources. Let's assume that we have 2 web services sitting in Azure (ie WebApi1, and WebApi2), both of which are set to use Azure AD authentication. Then, we have the native mobile app, which needs access to both web services (WebApi1, and WebApi2). Let's look at what we can and cannot do. 
 
 ## Cannot Use the Same Azure AD Access-Token for Multiple Resources
 
@@ -44,9 +44,9 @@ The first thing that comes to mind is to use the same access token for multiple 
 
 ## Use the Refresh-Token to Acquire Tokens for Multiple Resources
 
-The ADAL library supports acquiring multiple access-Tokens for multiple resources using a refresh token. This means once a user is authenticated, the ADAL&#8217;s authentication context, would be able to generate an access-token to multiple resources without authenticating the user again. This was mentioned briefly by the MSDN documentation <a href="http://msdn.microsoft.com/en-us/library/azure/dn499820.aspx" target="_blank">here</a>. 
+The ADAL library supports acquiring multiple access-Tokens for multiple resources using a refresh token. This means once a user is authenticated, the ADAL authentication context, would be able to generate an access-token to multiple resources without authenticating the user again. This was mentioned briefly by the MSDN documentation <a href="http://msdn.microsoft.com/en-us/library/azure/dn499820.aspx" target="_blank">here</a>. 
 
-> The refresh token issued by Azure AD can be used to access multiple resources. For example, if you have a client application that has permission to call two web APIs, the refresh token can be used to get an access token to the other web API as well. (MSDN documentation) 
+The refresh token issued by Azure AD can be used to access multiple resources. For example, if you have a client application that has permission to call two web APIs, the refresh token can be used to get an access token to the other web API as well. (MSDN documentation) 
 
 <pre class="brush: csharp; gutter: false; title: ; notranslate" title="">public async Task&lt;string&gt; RefreshTokens()
 {
