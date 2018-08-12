@@ -14,7 +14,7 @@ tags:
 <span>Azure Monthly News - Aug 2018 (from Melbourne Azure Meetup)</span>
 
 
-In this month's edition of Azure News, we look at the summary of what happened over the last 4 weeks. There is a lot to cover, so let's get started. 
+Hi again, here is the summary of Azure news from the last four weeks. This is brought to you by Melbourne Azure Meetup, which I am a co-organiser of :) There is a lot to cover, so let's get started. 
 
 # Dev News
 
