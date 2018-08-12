@@ -1,6 +1,6 @@
 ---
 title: Azure Monthly News Summary - Aug 2018
-date: 2018-08-02T18:30:47+00:00
+date: 2018-08-08T18:30:47+00:00
 author: has
 layout: post
 permalink: /azure-monthly-news-summary-aug-2018
