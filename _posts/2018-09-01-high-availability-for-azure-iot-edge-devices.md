@@ -13,7 +13,7 @@ tags:
   - High Availability
 ---
 
-<img src="/wp-content/uploads/2018/09/sensor-cloud.png" alt="High Availability for Azure IoT Edge" /> <br />
+<img src="/wp-content/uploads/2018/09/sensor-cloud.png" alt="High Availability for Azure IoT Edge" height="150" /> <br />
 
 # Introduction
 Azure IoT Edge is a great service from Microsoft Azure that enables us to push analytics and intelligence compute to the Edge. In previous posts, I wrote about [how we can develop modules to run on the edge](https://www.hasaltaiar.com.au/melbourne-azure-nights-the-age-of-azure-iot-edge/) as well as [how to architect and design such solutions](https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge). Essentially this will help us in [operationalising machine learning models](https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge) and deliver value faster to any Operation Technology team to provide them with intelligence where it matters -on site-. 
@@ -27,14 +27,14 @@ Microsoft is spending big money on the Internet of Things technology and tools. 
 # Proposed solution 
 Before we delve into the details of the solution, it's worth re-iterating what our solution architecture is. Below, is the solution design diagram I borrowed from my [previous post](https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge) on how to operationalise machine learning models on the Azure IoT Edge. 
 
-<a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge" target="_blank"><img src="/wp-content/uploads/2018/08/microservices-arch-iot-edge.png" alt="Micro-Services on Azure IoT Edge" /></a> <br />
+<a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge" target="_blank"><img src="/wp-content/uploads/2018/08/microservices-arch-iot-edge.png" alt="Micro-Services on Azure IoT Edge" height="250" /></a> <br />
 <span>My Solution design from <a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge" target="_blank">last</a> design on how to operationalise machine learning models on the Edge</span>
 
 To be able to have High Availability, we need to have mutliple Azure IoT Edge devices. These devices will have _identical_ workload so that they can replace each other at any point. The remaining issue is how do we ensure that only device is running the compute workload at any point in time? For this reason, we have one device serving as the `primary` Edge device which is active by default and running the workload. If the `primary` Edge device goes down, then one of the `secondary` devices will come up to compensate and run the workload. 
 It's worth mentioning that these devices do not have awareness of this High Availability jazz. This is controlled externally. What the devices see is a `flag` that controls whether they are active in processing the workload or not. This `flag` is set in the `device twin` and controlled remotely using Azure IoT hub. 
 
 
-<img src="/wp-content/uploads/2018/09/azure-iot-edge-high-availability.png" height="150" alt="High Availability for Azure IoT Edge" /><br />
+<img src="/wp-content/uploads/2018/09/azure-iot-edge-high-availability.png" alt="High Availability for Azure IoT Edge" /><br />
 <span>High Availability for Azure IoT Edge</span>
 
 
