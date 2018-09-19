@@ -1,7 +1,7 @@
 ---
 id: 4166
 title: 'Using F#, Fake, and VSTS for a Consistent, Repeatable, and Dependable DevOps Process'
-date: 2017-09-25T20:01:15+00:00
+date: 2017-09-12T20:01:15+00:00
 author: has
 layout: post
 guid: https://www.hasaltaiar.com.au/?p=4166
@@ -13,7 +13,7 @@ categories:
   - vsts
 ---
 
-I have been using F#, Fake anf VisualStudio Online for DevOps for a while and I got to say that I really love it. I Spoke about this a few weeks back at DDD Melbourne (DDDByNight) and last week I presented the same topic at NDC Sydney. Here I share the slides and the demo code and I hope you find it uesful. 
+I have been using F#, Fake anf VisualStudio Online for DevOps for a while and I got to say that I really love it. I Spoke about this a few weeks back at DDD Melbourne (DDDByNight) and recently I presented the same topic at NDC Sydney. Here I share the slides and the demo code and I hope you find it uesful. 
 
 
 
