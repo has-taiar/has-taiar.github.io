@@ -8,22 +8,21 @@ guid: https://www.hasaltaiar.com.au/?p=4206
 permalink: /congrats-you-are-a-solution-architect-now-what/
 image: /wp-content/uploads/2017/09/Solution-Architecture-DDDPerth.jpg
 categories:
+  - Azure
   - .NET
   - Architecture
-  - Azure
-  - 'C#'
+  - IoT
   - Cloud
-  - Communications
   - Development Practices
   - Employability
 tags:
+  - Azure
+  - .NET
   - Architecture
-  - Career
-  - Conferences
-  - Practices
-  - presentation
-  - Public Speaking
-  - solutions design
+  - IoT
+  - Cloud
+  - Development Practices
+  - Employability
 ---
 
 Last week, I was fortunate enough to speak at <a href="https://dddperth.com/" target="_blank">DDDPerth</a>, which was a great conference and awesome and engaged audience. There were about ~ 350 people attending, with the amazing help of the organisers and volunteers. Here is the link to my slides, and I would love to hear your feedback: 
