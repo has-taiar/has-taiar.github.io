@@ -1,7 +1,7 @@
 ---
 id: 4206
 title: Congrats, you are a Solution Architect, now what?
-date: 2017-09-17T11:57:52+00:00
+date: 2017-09-25T16:57:52+00:00
 author: has
 layout: post
 guid: https://www.hasaltaiar.com.au/?p=4206
@@ -25,10 +25,6 @@ tags:
   - Public Speaking
   - solutions design
 ---
-## Update Nov 2017
-DDDPerth has published the recording of my session, so I am embedding it here for completeness :) 
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/yikSzz9l2qU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Last week, I was fortunate enough to speak at <a href="https://dddperth.com/" target="_blank">DDDPerth</a>, which was a great conference and awesome and engaged audience. There were about ~ 350 people attending, with the amazing help of the organisers and volunteers. Here is the link to my slides, and I would love to hear your feedback: 
 
