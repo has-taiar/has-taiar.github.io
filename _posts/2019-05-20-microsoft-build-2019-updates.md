@@ -1,6 +1,6 @@
 ---
-title: Azure Monthly News Summary - November 2018
-date: 2018-11-14T20:30:47+00:00
+title: Microsoft Build 2019 - Updates and demos 
+date: 2019-05-23T20:30:47+00:00
 author: has
 layout: post
 permalink: /microsoft-build-2019-updates
