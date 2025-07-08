@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'SQLite.Net.Cipher: Secure your data on all mobile platforms seamlessly and effortlessly'</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>'SQLite.Net.Cipher: Secure your data on all mobile platforms seamlessly and effortlessly'</h2>
+    <p><em>August 06, 2015</em></p>
+    <p>SQLite database have become the first choice for storing data on mobile devices. SQLite databases are just files that are stored on the file system. Other apps, or processes <strong>can</strong> read/write data to this database file. This is true for almost all platforms, you could root/jailbreak the device and get the database file to do with it whatever you like. That&#8217;s why it is very important that you start looking into securing your data as much as possible. </p>
+<p>In a <a href="http://www.hasaltaiar.com.au/lets-hack-it-securing-data-on-the-mobile-the-what-why-and-how/" target="_blank">previous blog post</a>, I talked broadly about how you could secure your data on mobile apps from an architectural point of view. In this post, I will show you how you can use SQLite.Net.Cipher to encrypt/decrypt data when stored/accessed in/from your database. This library helps you secure the data and do all the work for you seamlessly. All you need to do it annotate the columns that you want to encrypt with one attribute. The library will do the rest for you. </p>
+<h3>The Model</h3>
+<pre class="brush: csharp; title: ; notranslate" title="">public class SampleUser : IModel
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        [Secure] 
+        public string Password { get; set; }
+    }
+</pre>
+
+<p>Notice above that we have decorated our Password property with [Secure] attribute. This will tell the SQLite.Net.Cipher to encrypt the password property whenever storing data into the database, and it will decrypt it when reading out of the database. </p>
+<p>The model needs to implement IModel, which enforces the contract of having a property with the name Id as a primary key. This is a common standard, and you could use other columns for PrimaryKey if you want and use backing properties to satisfy this requirement if you like. </p>
+<h3>The Connection</h3>
+<p>Your database connection entity needs to extend the SecureDatabase, which is provided to you by the SQLite.Net.Cipher as below:</p>
+<pre class="brush: csharp; title: ; notranslate" title="">public class MyDatabase : SecureDatabase
+    {
+        public MyDatabase(ISQLitePlatform platform, string dbfile) : base(platform, dbfile)
+        {
+        }
+
+        protected override void CreateTables()
+        {
+            CreateTable&lt;SampleUser&gt;();
+        }
+    }
+</pre>
+
+<p>You can use the CreateTable() method to create whatever tables you need. There is also another constructor that allows you to pass your own implementation of the ICryptoService if you like. This is the entity that is responsible for all encryption and decryption tasks. </p>
+<h3>See it in Action</h3>
+<p>Now to see the library in action, you could establish a connection to the database, insert some data and retrieve it:</p>
+<pre class="brush: csharp; title: ; notranslate" title="">var dbFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "mysequredb.db3");
+    var platform = new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS();
+    ISecureDatabase database = new MyDatabase(platform, dbFilePath);
+    var keySeed = "my very very secure key seed. You should use PCLCrypt strong random generator";
+
+    var user = new SampleUser()
+    {
+        Name = "Has AlTaiar", 
+        Password = "very secure password :)", 
+        Id = Guid.NewGuid().ToString()
+    };
+
+    var inserted = database.SecureInsert&lt;SampleUser&gt;(user, keySeed);
+
+    // you could use any desktop to inspect the database and you will find the Password column encrypted (and converted base64)
+
+    var userFromDb = database.SecureGet&lt;SampleUser&gt;(user.Id, keySeed);
+
+</pre>
+
+<p>And that&#8217;s all 🙂 Assuming that you have installed the Nuget Package.<figure id="attachment_3642" style="width: 738px" class="wp-caption aligncenter"></p>
+<p><a href="https://i0.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2015/08/sqlite.png"><img src="https://i0.wp.com/www.hasaltaiar.com.au/wp-content/uploads/2015/08/sqlite.png?resize=525%2C60" alt="SQLite.Net.Cipher" width="525" height="60" class="size-full wp-image-3642" data-recalc-dims="1" /></a><figcaption class="wp-caption-text">SQLite.Net.Cipher</figcaption></figure> </p>
+<h3>Dependencies</h3>
+<p>Please note that this library relies on the following great projects:</p>
+<p><a href="https://github.com/oysteinkrog/SQLite.Net-PCL" target="_blank">SQLite.Net-PCL</a></p>
+<p><a href="https://github.com/aarnott/pclcrypto" target="_blank">PCLCrypto</a></p>
+<p>Both of these projects are really great and they support all major platforms, including builds for PCL libraries, so I would highly encourage your to look into them if you have not seen them before. </p>
+<p>You could find the library on Nuget <a href="https://www.nuget.org/packages/sqlite.net.cipher" target="_blank">here</a>, and the source code is on GitHub <a href="https://github.com/has-taiar/SQLite.Net.Cipher" target="_blank">here</a>, feel free to fork, change, and do whatever you like 🙂 I hope you find the library useful and I would love to hear any comments, questions, or feedback.</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

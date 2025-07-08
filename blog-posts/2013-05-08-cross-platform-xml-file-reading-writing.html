@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross Platform Xml File Reading/Writing</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Cross Platform Xml File Reading/Writing</h2>
+    <p><em>May 08, 2013</em></p>
+    <p>Recently, I was working on a project where I needed to have a great deal of c# libraries ported to MonoDroid and MonoTouch (for Android and iOS), so that is what I have been spending my time on.</p>
+<p>In these libraries in many places I needed to read/write files or load types from Reflection, so I ended up having a (string) extension that is called </p>
+<blockquote>
+<p>CorrectPath()</p>
+</blockquote>
+<p>. This method can be called from everywhere in my application. In this method I check for on which platform the application is running and then based on that I remove the file prefix </p>
+<blockquote>
+<p>(file:\, file:, etc)</p>
+</blockquote>
+<p>so that it fits Android and iOS file systems. I will include the code for </p>
+<blockquote>
+<p>CorrectPath()</p>
+</blockquote>
+<p>at the end of this article.</p>
+<p>Also, I found that MonoDroid does not support including files as </p>
+<blockquote>
+<p>Contents</p>
+</blockquote>
+<p>. MonoDroid encourages the usage of Resources or Assets. Therefore, and for that reason, reading files on Android and on other platforms became different. So in order to avoid that. I created an entity called FileHelper, this has a method called ReadAllText() and can be called from everywhere in the application. The implementation of this ReadAllText() method is different on Android since it needs to read the files as <code>EmbededResources</code>. However the same code could be used on iOS and Windows Mobile. The code below. I have also posted about this on StackOverflow, please see it <a title="Reading XML in a unified way on different platforms" href="http://stackoverflow.com/questions/15942871/cross-platform-reading-of-xml-files" target="_blank">here</a></p>
+<p>Parts of the code is below. Please feel free to leave me a comment if I missed anything or if you have any idea/suggestion</p>
+<p><strong>Windows Mobile and iOS</strong></p>
+<pre class="brush: csharp; title: ; notranslate" title="">public class FileHelper
+{
+     public static string ReadAllText(string filePath)
+     {
+          var path = filePath.GetFullPath();
+          if (!File.Exists(path))
+          {
+               Logging.LogHandler.LogError("File " + path + " does not exists");
+               return string.Empty;
+          }
+          using (var reader = new StreamReader(filePath))
+          {
+               return reader.ReadToEnd();
+          }
+     }
+}
+</pre>
+
+<p><strong>Android version</strong></p>
+<pre class="brush: csharp; title: ; notranslate" title="">public class FileHelper : BaseFileHelper
+{
+     public static string ReadAllText(string filePath)
+     {
+          var entryAssemblyPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).Replace("file:", ""), "MyExecutableAssemblyName.dll");
+          // This is because Assembly.GetEntryAssembly() returns null on Android... Booohhh
+          var assembly = Assembly.LoadFrom(entryAssemblyPath);
+          using (var stream = assembly.GetManifestResourceStream(filePath.GetFullPath()))
+          {
+               using (var reader = new StreamReader(stream))
+               {
+                    return reader.ReadToEnd();
+               }
+          }
+     }
+}
+</pre>
+
+<p>I had a shared code for Constants and an extention method for paths as below</p>
+<p><strong>Constants.cs</strong></p>
+<pre class="brush: csharp; title: ; notranslate" title="">public static Class Constants
+{
+     private static string _RootPath;
+     private static string _iOSRootPath;
+     private static string _AndroidResourcePath;
+
+     public static string RootPath
+     {
+          get
+          {
+               if (string.IsNullOrEmpty(_RootPath))
+               {
+                    _RootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).Replace(FileURIPrefix, "") + "\My Documents\Business";
+               }
+               return _RootPath;
+          }
+     }
+
+     public static string iOSRootPath
+     {
+          get
+          {
+               if (!string.IsNullOrEmpty(_iOSRootPath))
+               {
+                    _iOSRootPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).Replace(FileURIPrefix, "").Replace("file:", ""), Path.Combine("My_Documents", "Business"));
+               }
+               return _iOSRootPath;
+          }
+     }
+
+     public static string AndroidResourcePath
+     {
+          get
+          {
+               if (string.IsNullOrEmpty(_AndroidResourcePath))
+               {
+                    _AndroidResourcePath = "MyAppMainDllName.MyFolderName.";
+               }
+               return _AndroidResourcePath;
+          }
+     }
+}
+</pre>
+
+<p><strong>PathExtentions.cs</strong></p>
+<pre class="brush: csharp; title: ; notranslate" title="">public static class PathExtensions
+{
+     public static string GetFullPath(this string filePath)
+     {
+          if (Platform.IsAndroid) // platform is a class that I have to tell me which platfrom I am at 🙂
+          {
+               return Constants.AndroidResourcePath + filePath;
+          }
+          if (Platform.IsIOS)
+          {
+               return Path.Combine(Constants.iOSRootPath, filePath);
+          }
+          return Path.Combine(Constants.RootPath, filePath);
+     }
+}
+</pre>
+
+<p>After setting this up, I am using my <code>FileHelper</code> just as easy as below</p>
+<blockquote>
+<p>string configuratinContents = FileHelper.ReadAllText(configruationPath);</p>
+</blockquote>
+<p>To whoever using this code, remember to set the build action to </p>
+<blockquote>
+<p>EmbededResources</p>
+</blockquote>
+<p>on Android, and to </p>
+<blockquote>
+<p>Content </p>
+</blockquote>
+<p>on iOS and Windows Mobile.</p>
+<p>The Advantage of this is that my code does not need to know about which platform it is running or how to load a file. That is dealt with in the </p>
+<blockquote>
+<p>FileHelper </p>
+</blockquote>
+<p>the rest of the libraries can focus on the business logic</p>
+<p>Enjoy..</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

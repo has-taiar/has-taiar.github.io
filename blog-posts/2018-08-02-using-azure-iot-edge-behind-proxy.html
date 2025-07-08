@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Using Azure IoT Edge Behind Proxy</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Using Azure IoT Edge Behind Proxy</h2>
+    <p><em>August 02, 2018</em></p>
+    <p><img src="/wp-content/uploads/2018/08/azure-iot-edge-with-proxy.png" alt="Azure IoT Edge behind firewall" /> <br />
+<span>Azure IoT Edge behind firewall</span></p>
+<p>Azure IoT Edge is a great offering for shifting load from the cloud to the Edge. It enables scenarios where there is emphasis on low-latency, better performance, higher security, better privacy, etc. 
+One limitation of the Azure IoT Edge is that it currently does not support operating behind a proxy. </p>
+<h1>Finding the problem</h1>
+<p>The first challenge was finding where the problem was, I setup my Docker to use my proxy settings and changed my IoT Edge runtime config to have the proxy settings as below: </p>
+<p><img src="/wp-content/uploads/2018/08/docker-proxy-settings.PNG" alt="Docker settings to support firewall" /> <br />
+<span>Docker settings to support firewall</span></p>
+<p><img src="/wp-content/uploads/2018/08/iot-edge-config.PNG" alt="Location of IoT Edge config file" /> <br />
+<span>Location of IoT Edge config file</span></p>
+<pre class="codehilite"><code># sample config change from IoT Edge config file
+agent:
+  name: &quot;edgeAgent&quot;
+  type: &quot;docker&quot;
+  env: {&quot;HTTP_PROXY&quot;: &quot;http://user:pwd@proxy.com&quot;, &quot;HTTPS_PROXY&quot;: &quot;http://user:pwd@proxy.com&quot;}
+  env: {}
+  config:
+    image: &quot;mcr.microsoft.com/azureiotedge-agent:1.0&quot;
+    auth: {}
+</code></pre>
+
+<p><br /><span>Sample config to enable ENV varialbes in IoT Edge Runtime</p>
+<p>However, that did not fix the problem. To make things more difficult, the docs do not mention anything about operating behind a proxy. 
+After some investigation, I took this conversation to the Azure IoT Edge dev team on GitHub, can find the details <a href="https://github.com/Azure/iotedge/issues/5">here</a> </p>
+<h1>Defining The Problem</h1>
+<p>It turned out that the problem is worse than I expected. The lack of support for Proxy was not just a limitation in the IoT Edge. It was due to lake of proxy support in the SDK libraries as it can be seen in the conversation with the IoT Edge product team. 
+There is no way to get around this unless the SDK libraries implement support for proxy settings, then the IoT Edge product team can adopt this change on their end too. </p>
+<h1>The Solution</h1>
+<p>While all this may take time, I need a solution urgently, and hence we have the solution below :) 
+We concluded that the solution was to exempt the IoT Hub traffic from our proxy. However, punching a hole in the firewall would not appeal to any Infrastructure team. Thus, to solve the problem with minimal security impact, we did the following: 
+- Open port 443 (https) on the IoT Edge machine (outbound) 
+- Enabled a proxy exemption rule for specific traffic. This exemption only applies to: 
+  - Https traffic (on port 443) from the IoT Edge device going outbound
+  AND
+  - The exmemption only applies to traffic going to Azure IoT Hub. This was enforced by white-lising Azure IP Address(es) for our specific region. </p>
+<p>So there you have it, with this change we enabled our IoT Edge device to work behind a proxy and there is minimal impact on our security posture. </p>
+<p>It's important to understand that this solution is mostly to enable traffic between our IoT Edge environment (IoT Edge Hub and IoT Edge Agent modules) and the IoT Hub. 
+This means that if you have other IoT Edge modules that are loading external contents (at runtime) then they will still need to have proxy settings. </p>
+<p>I hope this has been useful, please let me know if you have questions or comments, would love to hear feedback. </p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

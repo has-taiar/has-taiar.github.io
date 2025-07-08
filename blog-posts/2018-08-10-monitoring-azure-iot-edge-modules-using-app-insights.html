@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoring Azure IoT Edge Modules Using Azure App Insights</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Monitoring Azure IoT Edge Modules Using Azure App Insights</h2>
+    <p><em>August 10, 2018</em></p>
+    <p><img src="/wp-content/uploads/2018/08/azure-iot-edge-modules.png" alt="Monitoring of Azure IoT Edge Modules" /> <br />
+<span>Monitoring of Azure IoT Edge Modules</span></p>
+<h1>Azure IoT Edge Modules</h1>
+<p>The Azure IoT Edge offering is a great way of shifting the load from the cloud to the Edge of the network, closer to the source of the data. Azure IoT Edge offering allows us to run code and data pipeline close to where the data is originated to improve performance, security, and privacy. The Azure IoT Edge provides the flexibility to deploy and run these modules as docker containers. </p>
+<p>One main challenge however is how do we stay on top of what's happening on our IoT Edge device and how do we stay up-to-date with the status of our IoT Edge modules. This is what we try to cover in this blog post. </p>
+<p>We will use Azure Application Insights to monitor the health of our Azure IoT Edge device as well as our modules in near real-time. </p>
+<h1>Create an Azure App Insights instance</h1>
+<p>There is enough documentation on the Microsoft <a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-create-new-resource">MSDN</a> on how to create an App insights resource, so we do not need to cover it here. 
+All we need is to ensure that we have a resource up and running and we need to copy the <code>instrumentationKey</code> for later use. </p>
+<h1>Deploying The Azure App Insight Docker Image</h1>
+<p>Once we have a resource in our Azure subscription, we can then deploy the Azure App Insights docker image either via the Azure IoT Hub or directly via the command line. The end command should look like this: </p>
+<pre class="codehilite"><code># need to replace the instrumentation key here
+docker run -v /var/run/docker.sock:/docker.sock -d microsoft/applicationinsights ikey=your-instrumentation-key
+</code></pre>
+
+<p>This will tell docker to pull the docker image <code>microsoft/applicationinsights</code> and gives it the parameter <code>ikey</code>. This will taka a minute or so before it starts sending telemetry to our Azure App Insights Instance. </p>
+<h1>Configuring the Reports</h1>
+<p>Previously, we used to be able to configure our App Insights dashboard to have whatever reports that we wanted. This was recently changed to show certain reports only. However, we can still configure our main dashboard to produce whatever reports we want. </p>
+<p>The first thing we will need to do is to <code>create a new dashboard</code> in the Azure portal. This's to allow us to add the new reports that Azure App Insights comes with out-of-the-box. Once we do that, we can then pull the reports we want. I have pulled three reports in the screenshot below. These are <code>Docker Overview</code>, <code>Servers</code>, and <code>Performance Timeline</code>. </p>
+<p><img src="/wp-content/uploads/2018/08/docker-report-dashboard.png" alt="Azure App Insights - Docker Overview Reports" /> <br />
+<span>Azure App Insights - Docker Overview Reports</span></p>
+<h1>The Reports</h1>
+<p>There are three main reports that we are interested in: </p>
+<h2>Docker Overview</h2>
+<p>This is the main report and it gives loads of information: </p>
+<h3>Full monitoring of the IoT Edge device</h3>
+<p>The top of the report shows the health of the host machine in a glace. The report includes information about processor (processing) time, Memory (available in GB), Docker RX Bytes, and Docker TX Bytes (Network activity of the docker host). An example of the report can be seen below. </p>
+<p><img src="/wp-content/uploads/2018/08/docker-overview.png" alt="Azure App Insights - Docker Overview Sample Report" /> <br />
+<span>Azure App Insights - Docker Overview Sample Report</span></p>
+<h3>Health of Each IoT Edge Module</h3>
+<p>Below that, a full breakdown of resource utilisaiton at the docker host level and at the container level. This's grouped into 2 parts: <code>Activity by Docker Host</code> and <code>Activity by Container</code>. This can be seen below. </p>
+<p><img src="/wp-content/uploads/2018/08/docker-activity.png" alt="Azure App Insights - Docker Activity by Host and by Container" /> <br />
+<span>Azure App Insights - Docker Activity by Host and by Container</span></p>
+<p>Each of the IoT Edge modules is represented by a line in the <code>Activity by Container</code> table. Clicking on any of these modules will take us to a more detailed reports about this particular module. An example of this is shown below: </p>
+<p><img src="/wp-content/uploads/2018/08/docker-activity-by-container.png" alt="Azure App Insights - Docker Activity by Container" /> <br />
+<span>Azure App Insights - Docker Activity by Container</span></p>
+<h3>Servers Report</h3>
+<p>The servers report gives us lots of information about the host docker machine. In a way it's similar to the Docker Overview reports. </p>
+<h3>Custom (Docker) Events</h3>
+<p>Another tile that we can add to the dashboard has custom events. By default it will include all <code>Docker Events</code>. Things like <code>start</code> and <code>stop</code> of IoT Edge modules. An example of these reports below: </p>
+<p><img src="/wp-content/uploads/2018/08/docker-events.png" alt="Azure App Insights - Docker Events" /> <br />
+<span>Azure App Insights - Docker Events</span></p>
+<p>Clicking on any of these events, gives us a list of all occurances of this event as below: 
+<img src="/wp-content/uploads/2018/08/docker-events2.png" alt="Azure App Insights - Docker Events (List by Container)" /> <br />
+<span>Azure App Insights - Docker Events (List by Container)</span></p>
+<p>Lastly, all these reports are built using the Analytics console which is part of the Azure App Insights. We can customise any of these reports by clicking on the customise button at the top right corner of each chart (open chart in analytics). Upon clicking on the customise button, we will see the analytics page like below. In this analytics console, the query is shown, we can then modify the query to match our needs. </p>
+<p><img src="/wp-content/uploads/2018/08/chart-in-analytics.png" alt="Azure App Insights - Customise Chart in Analytics Console" /> <br />
+<span>Azure App Insights - Customise Chart in Analytics Console</span></p>
+<h1>Conclusions</h1>
+<p>In just a few clicks, we got lots of reports that gives us lots of information about how our IoT Edge (docker host) machine is doing in near real-time as well as detailed information about the individual modules. Please bear in mind that there are many other reports that I have not covered. </p>
+<p>In the next blog post, I will cover how we can get more trace and error information from individual IoT Edge modules. </p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

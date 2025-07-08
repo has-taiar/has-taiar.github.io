@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading Battery Level and Status in iOS using MonoTouch</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Reading Battery Level and Status in iOS using MonoTouch</h2>
+    <p><em>January 13, 2014</em></p>
+    <p>In a previous post, I showed how to read the Battery level (and other attributes on Android). In this post, I will demo how to do the same thing on iOS.</p>
+<p>I had the same requirements from the previous post, which is to update the screen on my app with information about the iOS resources. This included Battery Level and Status, Wifi Connectivity, Gprs Connectivity, Gps locations update, and Bluetooth. In this post, I will demo reading the battery attributes on iOS, and in the next few posts I will demo the remaining parts.</p>
+<p>So to start with, I have created an iOSBattery class which is similar to the one I showed on Android. This reads the Battery Level and Status and makes them available for higher levels of the app.</p>
+<pre class="brush: csharp; title: ; notranslate" title="">using System;
+using MonoTouch.UIKit;
+
+namespace MyApp.HAL.Battery
+{
+    public class IOSBattery
+    {
+        public IOSBattery()
+        {
+            _Battery = new Battery();
+            Update();
+        }
+
+        private Battery _Battery { get; set; }
+
+        public int BatteryLevel
+        {
+            get
+            {
+                return _Battery.Level;
+            }
+        }
+
+        public BatteryStatus BatteryStatus
+        {
+            get
+            {
+                return GetBatteryStatus(_Battery.Status);
+            }
+        }
+
+        public void Update()
+        {
+            try
+            {
+                UIDevice.CurrentDevice.BatteryMonitoringEnabled = true;
+                _Battery.Level = (int)(UIDevice.CurrentDevice.BatteryLevel * IOSBatteryLevelScalingFactor);
+                _Battery.State = UIDevice.CurrentDevice.BatteryState;
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.HandleException(e, "BatteryState.Update");
+                throw new BatteryUpdateException();
+            }
+            finally
+            {
+                UIDevice.CurrentDevice.BatteryMonitoringEnabled = false;
+            }
+        }
+
+        private BatteryStatus GetBatteryChargeStatus()
+        {
+            var result = BatteryStatus.Unknown;
+            if (_Battery != null)
+            {
+                switch (_Battery.State)
+                {
+                    case UIDeviceBatteryState.Charging:
+                        result = BatteryStatus.Charging;
+                        break;
+                    case UIDeviceBatteryState.Full:
+                        result = BatteryStatus.Full;
+                }
+            }
+            return result;
+        }
+
+        // iOS returns the values as percetages like 0.85
+        private const int IOSBatteryLevelScalingFactor = 100;
+
+        #region Nested types
+
+        public class BatteryUpdateException : Exception
+        {
+        }
+
+        public class Battery
+        {
+            public Battery()
+            {
+                Level = 0;
+                State = UIDeviceBatteryState.Unknown;
+            }
+
+            public int Level { get; set; }
+            public UIDeviceBatteryState State { get; set; }
+        }
+
+        #endregion
+
+        #region Battery Status Enums
+
+        public enum BatteryStatus
+        {
+            Charging = 0,
+            Full = 1,
+            Unknown = 2,
+        }
+
+        #endregion
+    }
+}
+</pre>
+
+<p>Similar to the AndroidBattery that I have demonstrated in the previous post, we have iOSBattery here where we it makes the Battery Level and the status available for other components of the app. Two things to notice:</p>
+<ol>
+<li>The battery level returned by the iOS is a decimal percentage (ie 0.85) and hence we need to multiply that by 100, because our business logic expects the battery level to be of range 1-100 and that is shared across multiple platform.</li>
+<li>We set the EnableBatteryMonitoring before we read and then we set it to false once we finish with reading the battery properties.</li>
+</ol>
+<p>I hope you find this post useful. Feel free to use all or parts of it, and would love to hear your feedback.</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

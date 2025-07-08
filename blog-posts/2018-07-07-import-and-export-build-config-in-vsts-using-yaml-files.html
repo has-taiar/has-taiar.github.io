@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Importing & Exporting Build Config in VSTS using YAML files</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Importing & Exporting Build Config in VSTS using YAML files</h2>
+    <p><em>July 07, 2018</em></p>
+    <p><img src="/wp-content/uploads/2018/07/yaml-on-vsts.png" alt="YAML on VSTS" /> <br />
+<span>YAML on VSTS </span></p>
+<p>Visual Studio Online (VSTS) has a great feature that allows users to use YAML files for exporting or defining their builds. This feature was introduced not long ago, you can find lots of documentation <a href="https://docs.microsoft.com/en-us/vsts/pipelines/build/yaml?view=vsts">here</a>. </p>
+<h2>Why use YAML?</h2>
+<p>First, A few reasons for why you should use YAML files for defining your builds: </p>
+<ul>
+<li>It gives a great insight on the health of the build pipeline. You can see who made a change, what change, and at what point in time. This is essential for ensuring a healthy build pipeline. </li>
+<li>This also gives us the advantage of applying coding best practices (like pull request and code review) to control anything that goes into the build definition before its changed/merged. </li>
+<li>Another benefit of using YAML for build definition is that it makes your build <strong>portable</strong> across multiple accounts of VSTS. And, this is the main reason for this blog post. </li>
+</ul>
+<p>Let me explain, assume you have done some work on a particular project. I do work for many clients, and when I start developing I just use my VSTS account and Azure subscription to get things done quickly. When the project finished, we hand over the code and all other artefacts to the client. 
+Before the support of YAML, you would have to re-create the build manually step-by-step on the new VSTS account. However, now you can use YAML to export your build config and import this YAML on the other (client's) VSTS account. </p>
+<p>Here is a great comparison from the docs on how does using YAML compares with using the web portal (from the <a href="https://docs.microsoft.com/en-us/vsts/pipelines/build/yaml?view=vsts#how-do-yaml-builds-compare-to-web-interface-builds">VSTS docs</a>)</p>
+<p>The docs in the link above go into great details on how you can create, import, and export build configs using YAML, so I am not going to repeat that. Instead, I will share some of the issues that I faced when started using the YAML feature. </p>
+<h2>Preview Feature</h2>
+<p>At the time of this writing (Jul 2018), the YAML build config is still a preview feature. This means that you have to enable the feature on your account before you can use it. A common gotcha here is that the feature is only available on the list of Preview Features on the Account level and not the individual User level. The screenshot below shows both. </p>
+<p><img src="/wp-content/uploads/2018/07/individual-preview-features-on-vsts.PNG" alt="individual preview features on vsts" /> <br />
+<span>Individual User view of Preview Features in VSTS </span></p>
+<p><img src="/wp-content/uploads/2018/07/account-level-preview-features-on-vsts.PNG" alt="account level preview features on vsts" /> <br />
+<span>Account level view of Preview Features in VSTS </span></p>
+<h2>Use of Parameters</h2>
+<p>Another thing that you need to watch out for is the use of Parameters. If you have done the right thing and parameterised your build steps, then watch out for these parameters when your build is exported. This is because VSTS does not export the build parameters yet. This is true at the time of writing this post. </p>
+<h2>Service Endpoint Names</h2>
+<p>If your build config like most builds and deploys something to Azure, then you must have configured a Service Endpoint connect your VSTS account (and its build/deployments) to your Azure subscription. When you try to import your YAML it will fail if VSTS does not find a Service Endpoint that <strong>exactly</strong> matches the name. This can be painful and sometimes not easy to decipher what the error is trying to say, but once you create Service Endpoint with similar name to what you used on the source build, it should be all good. </p>
+<h2>No CD yet</h2>
+<p>Using YAML is great and can save you lots of time, but unfortunately it does not support Continuous Deployment yet. This means what you export/import your builds, you will only be able to do that for CI but not CD. </p>
+<h2>CI Build shows up as ONE step</h2>
+<p>When you create a CI build using YAML, VSTS will show it as one-step build only. That's because from VSTS perspective it's actually only one step, even though this one step has many build steps underneath. This really has no impact on the build but just sometime to be aware of. </p>
+<p>And that's it, now go and export and import some YAML build files :) </p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

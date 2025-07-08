@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Tooltip Element in UI Automation Tests using TestStack (White) framework</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Getting Tooltip Element in UI Automation Tests using TestStack (White) framework</h2>
+    <p><em>May 01, 2014</em></p>
+    <p>We use TestStack (White) UI Automation framework for our UI Automation tests, we have few tests that requires getting the error message from the tooltip to validate what is being displayed to the user. These tests were running fine but failing on the Build Server</p>
+<h2>The Problem</h2>
+<p>When trying to get the ToolTip using TestStack (White) framework <a href="http://docs.teststack.net/White/Windows.html" target="_blank">documented way</a>, we get null. Increasing the timeout setting (as documented <a href="http://docs.teststack.net/White/Advanced%20Topics/Waiting.html" target="_blank">here</a>) did not help. </p>
+<h2>The Solution</h2>
+<p>Adding retrial mechanisms, and few other attempts did not work. After doing some reading about Windows Forms and Tooltips, I found that Windows says a tooltip will only shown when the user hover over a UI Element <strong>and pause</strong> and that is what was missing. </p>
+<p>I started looking at the source code of TestStack (White) and how it tries to get the tooltip text, and apparently it was only trying to get the mouse over the ui element, then get the tooltip directly after moving the tooltip, <strong>without any wait</strong>, and this was the problem.</p>
+<p>The other thing that I found was, the source code moves the mouse over the UI element and reads the tooltip. This might work if the course (mouse pointer) was somewhere else, but if the pointer was already over the UI ELement, then it would not work. You would need to move the mouse away and move it back on top of the UI Element. This was another issue that we had with our retrial mechanism. </p>
+<p>In the end, I ended up creating a custom UI element and overriding the ErrorProviderMessage() method as below. </p>
+<pre class="brush: csharp; title: ; notranslate" title="">[ControlTypeMapping(CustomUIItemType.Text)]
+    public class MyAutomationLabel : CustomUIItem
+    {
+        public MyAutomationLabel(AutomationElement automationElement, ActionListener actionListener) : base(automationElement, actionListener)
+        {
+        }
+
+        protected MyAutomationLabel()
+        { 
+        }
+
+        public override string ErrorProviderMessage(Window window)
+        {
+
+            // 1. Hover away from the label
+            window.Mouse.Location = new Point(this.Location.X -20, this.Location.Y - 20);
+
+            // 2. move the mouse on top of the label
+            window.Mouse.Location = new Point(this.Bounds.Right + 10, this.Bounds.Top + 10);
+            this.actionListener.ActionPerformed(White.Core.UIItems.Actions.Action.WindowMessage);
+
+            // 3. Wait for tooltip to show up
+            Thread.Sleep(300);
+
+            return window.ToolTip.Text;
+        }
+    }
+</pre>
+
+<p>Then you could use this when you poll the form for a label (with an ErrorProvider/tooltip) and that should work 🙂</p>
+<p>Hope you find this useful, would love to hear from you if you have any questions or concerns.</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

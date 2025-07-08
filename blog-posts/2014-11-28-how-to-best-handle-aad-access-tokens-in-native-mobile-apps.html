@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Best handle AAD access tokens in native mobile apps</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>How to Best handle AAD access tokens in native mobile apps</h2>
+    <p><em>November 28, 2014</em></p>
+    <p>This blog post is the second in a series that cover Azure Active Directory SSO Authentication in native mobile apps. </p>
+<ol>
+<li><a href="http://www.hasaltaiar.com.au/implementing-azure-active-directory-single-sign-on-in-xamarin-ios-apps/" title="Implementing Azure Active Directory SSO (Single Sign on) in Xamarin iOS apps">Authenticating iOS app users with Azure Active Directory</a></li>
+<li><strong>How to Best handle AAD access tokens in native mobile apps. (this post)</strong></li>
+<li><a href="http://www.hasaltaiar.com.au/using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps/">Using Azure SSO tokens for Multiple AAD Resources From Native Mobile Apps</a></li>
+<li><a href="http://www.hasaltaiar.com.au/sharing-azure-active-directory-sso-access-tokens-across-multiple-native-mobile-apps/">Sharing Azure SSO access tokens across multiple native mobile apps.</a></li>
+</ol>
+<p>In the <a href="http://www.hasaltaiar.com.au/implementing-azure-active-directory-single-sign-on-in-xamarin-ios-apps/" target="_blank">previous post</a>, we talked about authenticating mobile app users using Azure AD SSO. In this post, we explore how to take this login further to persist the access token to interact with Azure AD. Let's assume that we have a web api app and a mobile app that consumes this web api. In order to secure this interaction between our mobile app and the web api, we could register both apps with Azure AD and let Azure handle the authentication for us. Azure AD is well suited for such tasks and it could sync to your on-premise AD too. This makes it very suitable for enterprise-like apps. </p>
+<h2>Securing the Web App</h2>
+<p>To start with, we will implement an authentication mechanism in our Web Api. We could create a vanilla Web Api in Visual Studio and implement Azure AD authentication on that. This is a straight-forward process and I assume that you could get this far on your own. For a good reference, Taiseer Joudeh has a good detailed tutorial, you could find it <a href="http://bitoftech.net/2014/09/12/secure-asp-net-web-api-2-azure-active-directory-owin-middleware-adal/" target="_blank">here</a>. </p>
+<h2>Securing the Mobile App</h2>
+<p>In the previous post, we talked about how we could use Azure AD along with Microsoft ADAL (ActiveDirectory Authentication Library) to authenticate users on native mobile apps. Thus, we will assume that you have followed the previous post and you have this part ready. If you are not sure, please revisit my <a href="http://www.hasaltaiar.com.au/implementing-azure-active-directory-single-sign-on-in-xamarin-ios-apps/" target="_blank">previous post</a>. </p>
+<h2>Setting up the Permissions in AAD</h2>
+<p>We have seen how to secure our apps with AAD, now we need to authorise the mobile app to access our Web App in AAD. To do this, we first need to <em>expose the webApi permissions</em> on Azure AD. We can navigate to AAD/Applications/our-web-app, then click on <em>download manifest</em>. This will give us a copy of the configuration of this app in AAD (simple Json file). We need to modify the permission section. We just need to add the following section to tell Azure AD that this web app can be accessed by other AAD apps. <figure id="attachment_2691" style="width: 300px" class="wp-caption aligncenter"></p>
+<p><img src="https://www.hasaltaiar.com.au/wp-content/uploads/2014/11/AAD-app-manifest-configuration-300x217.png" alt="AAD app manifest configuration" width="300" height="217" />
+<br /><span>AAD app manifest configuration</span> </p>
+<pre class="brush: jscript; title: ; notranslate" title="">appPermissions": [
+    {
+      "claimValue": "user_impersonation",
+      "description": "Allow the application full access to the service on behalf of the signed-in user",
+      "directAccessGrantTypes": [],
+      "displayName": "Have full access to the service",
+      "impersonationAccessGrantTypes": [
+        {
+          "impersonated": "User",
+          "impersonator": "Application"
+        }
+      ],
+      "isDisabled": false,
+      "origin": "Application",
+      "permissionId": "place a NEW GUID here",
+      "resourceScopeType": "Personal",
+      "userConsentDescription": "Allow the application full access to the service on your behalf",
+      "userConsentDisplayName": "Have full access to the service"
+    }
+  ]
+</pre>
+
+<p>We can update the manifest file then upload it. Azure will verify the file and update the permissions setting. This will enable AAD to offer accessing this web api just like any other permissions that it manages. You could read more on Azure AD impersonation and permission settings on <a href="http://msdn.microsoft.com/en-us/library/azure/dn132599.aspx" target="_blank">MSDN</a>. Note that you need to choose a NEW GUID for the permission id. </p>
+<p>Now, we need to configure our native mobile app in Azure AD to have access to our web api app. This is very simple as in the screenshot below. In the list of permissions on the left, now we have more permissions that we can grant to the mobile app. Whatever name you gave to your app would appear there along with the type of permissions that you have configured. In my case, I have named it MobileServices1 and that is what is appearing there. <figure id="attachment_2701" style="width: 300px" class="wp-caption aligncenter"></p>
+<p><img src="https://www.hasaltaiar.com.au/wp-content/uploads/2014/11/Azure-AD-app-permission-settings-300x124.png" alt="Azure AD app permission settings" width="300" height="124" /><br />
+<span>Azure AD app permission settings</span> </p>
+<p>Azure now knows to allow access from our native mobile app to the web app. </p>
+<p>Setting the permissions and configuration above would allow our mobile app to authenticate users and manage the access of the web app. This access is managed by the token that Azure would give when a user logs in. The trick now is how often do we need to ask for a token? If the mobile app interacts with the web api frequently, then we need to always have a valid token for all our requests. The question is then how to keep a valid request token all the times on a native mobile app? </p>
+<p>The answer is certainly dependent on what you are doing. If you are implementing a highly secure app (ie: banking), you might want to always check with Azure and maybe ask the user to login every time the token expires. <em>By Default, AAD access token expires in</em> <strong>one hour</strong>. This means that you might want to ask the user to login every one hour. This might be OK for some mobile apps, but it is certainly not convenient and not the normal flow you see in most apps. So what should we do if we wanted to only ask the user to login once, or once a while (ie: 3 months). To do that, we would then need to manage the access tokens and refresh seamlessly. </p>
+<p>ADAL comes with <strong>TokenCache</strong>, this is designed to help in caching tokens so that ADAL libray does not need to go back to Azure every time the mobile app asks for a token. Unfortunately, however, persistent caching of tokens is not supported in this release (ADAL 3.0.11..). This means that ADAL will only cache the token in memory, meaning that once the app restarts, or goes to the background in iOS, you might loose your access token. Therefore, we need to manage the token, and refresh it on our own in the background. </p>
+<p>There are many ways that you could do this, a simple way is to always check before we access the api, and see if we have a valid token or not. If we do, then great. If not, then we could check for the <strong>Refresh Token</strong>. Azure AD gives us a refresh token to use when our access token is about to expire. As the name indicates, it is used to refresh tokens. This means that when we ask Azure for a new token and provide this refresh token, Azure will give us a new token without asking the user to re-login. </p>
+<p>By Default, <strong>Azure AD refresh tokens are valid for about 14 days</strong>. This means as long as we refresh the token (even if once in this period of time), then we would have a valid token and we do not need to re-authenticate. Another security constraint that Azure AD imposes is that the <strong>access token can only be refreshed for a maximum period of 90 days</strong></p>
+<p>(i.e. 90 days after the initial issuance of the access and refresh tokens, the end user will have to sign themselves in again). This is done by Azure AD to enforce a better security measures and it still gives a convenient access to mobile users. Currently, these settings are not configurable in Azure AD, so we just go with the default ones. </p>
+<p>Alright, time to write some code. The code snippet below shows how you could structure your web api calls from your mobile app. Notice that we always call either <em>AcquireToken()</em> or </i>AcquireTokenByRefreshToken()</i> before every call. This is to ensure that we always have a valid token before we send a request to the web api. This could even be optimised further by checking if the access token still valid, then we skip the token refreshing call. I will leave this as an exercise for you to implement. In the next release of ADAL hopefully the <strong>TokenCache</strong> would be implemented, and then we would not need to do this. </p>
+<pre class="brush: csharp; title: ; notranslate" title="">public async Task&lt;string&gt; GetResultFromWebApi(string apiCallPath)
+{
+    var token = await AcquireOrRefreshToken ();
+    using (var httpClient = new HttpClient())
+    {
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        HttpResponseMessage response = await httpClient.GetAsync(apiBaseAddress + apiCallPath);
+        return await response.Content.ReadAsStringAsync();
+    }
+}
+
+private async Task&lt;string&gt; AcquireOrRefreshToken()
+{
+    var refreshToken = _storage.Get&lt;string&gt; (Constants.CacheKeys.RefreshToken);
+    AuthenticationResult authResult = null;
+
+    if (string.IsNullOrEmpty (refreshToken)) 
+    {
+        authResult = await _authContext.AcquireTokenAsync (
+            resourceId, clientId, new Uri (redirectUrl), new AuthorizationParameters (_controller), UserIdentifier.AnyUser, null);
+
+    } 
+        else 
+        {
+        authResult = await _authContext.AcquireTokenByRefreshTokenAsync (refreshToken, clientId);
+    }
+
+    // when calling refresh token, the UserInfo would be null
+    if (authResult.UserInfo != null)
+        _storage.Save&lt;string&gt; (Constants.CacheKeys.Email, authResult.UserInfo.DisplayableId);
+
+    _storage.Save&lt;string&gt; (Constants.CacheKeys.Token, authResult.AccessToken);
+    _storage.Save&lt;string&gt; (Constants.CacheKeys.ExpireOn, authResult.ExpiresOn.ToString("dd MMM HH:mm:ss"));
+    _storage.Save&lt;string&gt; (Constants.CacheKeys.RefreshToken, authResult.RefreshToken);
+
+    return authResult.AccessToken;
+}
+</pre>
+
+<p>That&#8217;s it, now your mobile app would keep interacting with the web api using a valid token. And if you are concerned about what happens when the user account is disabled, or the password is changed, then well done, you are following the topic properly. Azure AD, would either try to re-authenticate the user again (by showing the login screen), or gives an error. So we need to add some error handling to our code to catch these types of exceptions and handle them properly on the mobile app.</p>
+<p>Hope you find this blog post useful and would love to hear from you if you have a question or comment. In the next blog post, we will look at how we could use the same token for accessing multiple resources on Azure AD. </p>
+<p>This blog post is the second in a series that cover Azure Active Directory SSO Authentication in native mobile apps. </p>
+<ol>
+<li><a href="http://www.hasaltaiar.com.au/implementing-azure-active-directory-single-sign-on-in-xamarin-ios-apps/" title="Implementing Azure Active Directory SSO (Single Sign on) in Xamarin iOS apps">Authenticating iOS app users with Azure Active Directory</a></li>
+<li><strong>How to Best handle AAD access tokens in native mobile apps. (this post)</strong></li>
+<li><a href="http://www.hasaltaiar.com.au/using-azure-ad-sso-tokens-for-multiple-aad-resources-from-native-mobile-apps/">Using Azure SSO tokens for Multiple AAD Resources From Native Mobile Apps</a></li>
+<li><a href="http://www.hasaltaiar.com.au/sharing-azure-active-directory-sso-access-tokens-across-multiple-native-mobile-apps/">Sharing Azure SSO access tokens across multiple native mobile apps.</a></li>
+</ol>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

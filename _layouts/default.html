@@ -20,6 +20,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#186ef7">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoA6DQD1KQ2U5h7MQ5E6Q5WnqE5zv1Q1Q1Q1Q1Q1Q1Q1Q1Q" crossorigin="anonymous"></script>
     
     {% seo %}
     
@@ -29,17 +31,16 @@
 
   </head> 
   <body>
-    <section class="page-header">
+    <section class="page-header container py-3">
       <a href="/"><h1 class="project-name">{{ site.title }}</h1></a> 
       <h2 class="project-tagline">{{ site.description }}</h2>
-      <a href="/" class="btn">Home</a>
-      <a href="{{ site.social-links.twitter }}" target="_blank" class="btn">On Twitter</a>
-      <a href="{{ site.social-links.linkedin }}" target="_blank" class="btn">On LinkedIn</a>
-      <a href="/about.html" class="btn">About Has</a>
-      <a href="/contact.html" class="btn">Contact Has</a>
+      <a href="/" class="btn btn-primary">Home</a>
+      <a href="{{ site.social-links.twitter }}" target="_blank" class="btn btn-outline-info">On Twitter</a>
+      <a href="{{ site.social-links.linkedin }}" target="_blank" class="btn btn-outline-primary">On LinkedIn</a>
+      <a href="/about.html" class="btn btn-secondary">About Has</a>
+      <a href="/contact.html" class="btn btn-secondary">Contact Has</a>
     </section>
-
-    <section class="main-content">
+    <main class="container my-4">
       {{ content }}
 
       <footer class="site-footer"> 
@@ -47,7 +48,7 @@
             &copy; {{ site.time | date: "%Y-%m-%d" }} Has AlTaiar. All rights reserved
         </p>
       </footer>
-    </section>
+    </main>
 
     {% if site.google_analytics %}
       <script>

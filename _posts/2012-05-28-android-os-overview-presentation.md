@@ -22,7 +22,7 @@ To register, Follow <a href="https://acs.org.au/index.cfm?action=load&temID=even
   <strong style="display: block; margin: 12px 0 4px;"><a title="Android overview" href="http://www.slideshare.net/altaiar/android-overview-13103488" target="_blank">Android overview</a></strong>
 </div>
 
-The mobile market is witnessing a rapid increase in Android’s popularity amongst users, and developers.� According to Google, as of December 2011, there were over 700,000 Android devices activated every day (Wikipedia). Therefore, our presentation will be dedicated to Android OS.
+The mobile market is witnessing a rapid increase in Android’s popularity amongst users, and developers.� According to Google, as of December 2011, there were over 700,000 Android devices activated every day (Wikipedia). Therefore, our presentation will be dedicated to Android OS.
 
 <div>
   To starts with, a brief overview of Android OS is given to answer the questions: what is Android? And why it is significant? Then, we will present Android SDK, and its Development tools.
