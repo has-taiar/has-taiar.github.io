@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlertDialogs that Blocks Execution and Wait for input on Andorid (MonoDroid/Xamarin.Android)</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>AlertDialogs that Blocks Execution and Wait for input on Andorid (MonoDroid/Xamarin.Android)</h2>
+    <p><em>April 16, 2014</em></p>
+    <p>This blog post aims at addressing the following:</p>
+<ol>
+<li>
+<p>Why is blocking the UI and waiting for the User&#8217;s input is sometimes required?</p>
+</li>
+<li>
+<p>How to have an Alert Modal that waits for the user&#8217;s input on Android using MonoDroid (Xamarin.Android) </p>
+</li>
+</ol>
+<h2>Problem</h2>
+<p>I have some business logic (controllers), which assume that showing a confirmation box (alertDialog) is a blocking call on the UI. This need not change</p>
+<p>while I need to fulfill the requirement and show the screens with a confirm box. </p>
+<h3>Problem Details</h3>
+<p>I have seen all the arguments (<a href="http://stackoverflow.com/questions/6120567/android-how-to-get-a-modal-dialog-or-similar-modal-behavior" target="_blank">here</a> and <a href="http://stackoverflow.com/questions/2028697/dialogs-alertdialogs-how-to-block-execution-while-dialog-is-up-net-style" target="_blank">here</a>) and in many other places about how bad is Blocking the UI to wait for a feedback, and I cannot agree more.</p>
+<p>However, being good or a bad is one thing and having a requirement for a particular feature (blocking UI alert dialog) is another. </p>
+<p>I developed an app on Android using MonoDroid (Xamarin.Android), and it uses MVC design pattern. All the screens are designed to be dummy fragments (classes) that are bound to the Controllers.</p>
+<p>The Controllers are the core part of the business for this client. These Controllers were developed on Windows but they only have Business Logic, the requirement for me was to produce similar app in Android (similar to the windows one)</p>
+<p>which would use MVC and makes use of these controllers with no changes (or the minimum possible).</p>
+<p>This is understandable, considering the fact that these Controllers (including algorithms, libraries, etc) that have been tested, used and trusted. </p>
+<p>I developed the app well enough without the need to change any of the controllers and all worked well, UNTIL I need to have a confirmation box.</p>
+<p>Windows style of MessageBox or Confirm Box is all synchronous, meaning that it blocks the UI and wait for the user to click Yea/No. This was an assumption that sneaked into these controllers and I need to find a way to comply with that.</p>
+<p>Even when I ported the app to iOS, I did not have any issue with this, since iOS uses UI-Blocking mechanism of showing Alert/Confirm dialog boxes (Modal).</p>
+<p>However, Android uses Asynch approach to deal with anything that is UI related. This is great news in terms of the user experience, but it is terrible news to me, that I promised to do this app and bring the app as close as possible to Windows and iOS &#8220;without changing the controllers&#8221;. </p>
+<p>I started looking for options, I found Q&amp;A mentioned above on SO and other sites, and they all talk about the same thing were you need to pass a callback to the alertDialog. This is not an option for me because the Controllers assume that we have a blocking call to the UI when we require confirmation from the user.</p>
+<p>To Demo this, let&#8217;s look at the Logout Button event handler. </p>
+<pre class="brush: csharp; title: ; notranslate" title="">// logout call on Windows/iOS
+    public void Logout()
+    {
+        var args = new ConfirmEventArgs("Are you sure you want to logout?", "Logout?");
+        OnConfirmUser(args);
+        if (!args.Cancel)
+        {
+            DataManager.IsUserLoggingOff = true;
+            OnApplyWorkflow(new StimulusEventArgs(DataObject as IWorkflowDomain, Constants.Stimuli.Logout));
+        }
+    }
+    </pre>
+
+<p>I found (http://stackoverflow.com/questions/2028697/dialogs-alertdialogs-how-to-block-execution-while-dialog-is-up-net-style#10358260 ) this answer on SO, which some people say it works on Android using Java, but this did not work on Xamarin.Android. The reason was that this approach assumed that we send messages at a lower level between threads and then we throw an exception from one and then catch that exception in the other thread.</p>
+<p>This did not work on Xamarin.Android, and when asked Xamarin team for help, all they did was showing me the sample code where you need to provide a callback to the messageBox, as if I have not seen it before. </p>
+<h2>The Solution</h2>
+<p>After a lots of fiddling around, I ended up coming up with my approach, which basically creates a thread to do the confirmation on, and WAIT for the user&#8217;s input.</p>
+<p>The reason why we need the new thread is that to avoid blocking the main UI thread while we are waiting for the user input.</p>
+<p>The final result was something like this:</p>
+<pre class="brush: csharp; title: ; notranslate" title="">// In the BaseController, I added this method, which checks for platform and creats a new thread on Android only 
+    // (since the controllers code is shared cross-platforms)
+    protected void RunConfirmAction(Action runnableAction)
+    {
+        if (runnableAction != null)
+        {
+            if (Core.Platform.IsAndroid)
+            {
+                var confirmThread = new Thread(() =&gt; runnableAction());
+                confirmThread.Start();
+            }
+            else
+            {
+                runnableAction();
+            }
+        }
+    }
+
+    // The call to the logout method has now changed like this:
+    RunConfirmAction(Logout);
+
+    // the implemtation of the MessageBox waiting is like this:
+    public DialogResult MessageBoxShow(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+    {
+        if (_CurrentContext != null && _CurrentContext.Screen != null && MainForm.MainActivity != null)
+        {
+            Action&lt;bool&gt; callback = OnConfirmCallBack;
+            _IsCurrentlyInConfirmProcess = true;
+            Action messageBoxDelegate = () =&gt; MessageBox.Show(((Activity)MainForm.MainActivity), callback, message, caption, buttons);
+            RunOnMainUiThread(messageBoxDelegate);
+            while (_IsCurrentlyInConfirmProcess)
+            {
+                Thread.Sleep(1000);
+            }               
+        }
+        else
+        {
+            LogHandler.LogError("Trying to display a Message box with no activity in the CurrentContext. Message was: " + message);
+        }
+        return _ConfirmBoxResult ? DialogResult.OK : DialogResult.No;
+
+    }
+
+    private void OnConfirmCallBack(bool confirmResult)
+    {
+        _ConfirmBoxResult = confirmResult;
+        _IsCurrentlyInConfirmProcess = false;
+    }
+
+    private bool _ConfirmBoxResult = false;
+    private bool _IsCurrentlyInConfirmProcess = false;
+    </pre>
+
+<p>The code for the MessageBox class can be found <a href="http://stackoverflow.com/questions/10696769/messagebox-for-android-mono/14593853#14593853" target="_blank">here</a>, I have created this long time ago and it works nicely for green-field projects where you can post callbacks to the confirmation box. </p>
+<p>And that is all, after all this fiddling, I got something that satisfy the requirements, and my client was very happy that they do not need to change their Controllers (which means, less bugs, less testing, quicker delivery).</p>
+<p>Thus, I hope I have demo-ed good grounds for why it is sometimes necessary to have a blocking UI alertDialog on Android, and how it can be done.</p>
+<p>If you have any questions, or you think this could be done nicer, better or simpler, I would love to hear from you.</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

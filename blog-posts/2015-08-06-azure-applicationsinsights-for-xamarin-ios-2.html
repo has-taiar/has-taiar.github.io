@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure ApplicationsInsights for Xamarin iOS</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Azure ApplicationsInsights for Xamarin iOS</h2>
+    <p><em>August 06, 2015</em></p>
+    <p>Azure ApplicationInsights (AI) is a great instrumentation tool that can help you learn about how your application is doing during run-time. It is currently in Preview mode, so bear that in mind when developing production ready apps. It gives you the ability to log lots of different kinds of information like tracing, page views, custom events, metrics and more. </p>
+<p>Azure AI supports multiple platforms, but unfortunately they have not released a Xamarin package yet. There is <a href="https://github.com/Microsoft/ApplicationInsights-Xamarin" target="_blank">one library</a> which is for Xamarin.Forms since it uses the DependencyResolver. I have taken that and removed that dependency to make it compatible with Xamarin.iOS. You could do the same thing to use it for Xamarin.Android too if you like.</p>
+<p>It&#8217;s very simple to use, all you need is your instrumentationkey which you can get from your Azure portal. Follow the steps from the MSDN tutorial as you can see <a href="https://azure.microsoft.com/en-us/documentation/articles/app-insights-get-started/" target="_blank">here</a> to create the Azure AI instance and get your key. Once done, you could download and reference the repository that I have created on GitHub, as you can find it <a href="https://github.com/has-taiar/Azure.ApplicationInsight.Xamarin" target="_blank">here</a>. </p>
+<p>To start Azure AI on your Xamarin iOS app, you could do:</p>
+<pre class="brush: csharp; title: ; notranslate" title="">AzureAIManager.Setup();
+
+    AzureAIManager.Configure("my-user-or-device-name");
+
+    AzureAIManager.Start();
+
+</pre>
+
+<p>The implementation of the AzureAIManager is as follows:</p>
+<pre class="brush: csharp; title: ; notranslate" title="">public static class AzureAIManager
+    {
+        public static void Setup(string appKey = "your-azure-AI-instrumentation-key")
+        {
+            AI.Xamarin.iOS.ApplicationInsights.Init();
+
+            var ai = new AI.Xamarin.iOS.ApplicationInsights ();
+            ApplicationInsights.Init (ai);
+
+            TelemetryManager.Init(new AI.Xamarin.iOS.TelemetryManager());
+            ApplicationInsights.Setup(appKey);
+
+        }
+
+        public static void Start()
+        {
+            ApplicationInsights.Start();
+        }
+
+        public static void Configure(string userId = "" )
+        {
+            ApplicationInsights.SetAutoPageViewTrackingDisabled(true);
+
+            if (string.IsNullOrEmpty(userId))
+                ApplicationInsights.SetUserId(userId);
+        }
+
+        public static void RenewSession()
+        {
+            ApplicationInsights.StartNewSession();
+        }
+    }
+
+</pre>
+
+<p>I have not put this as a Nuget package because I am sure Microsoft will release one very soon, so until that happens, you can use this bindings to play around with Azure AI and you could even use it on your small projects.</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>

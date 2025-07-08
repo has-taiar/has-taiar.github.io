@@ -1,0 +1,96 @@
+.post-summary {
+  margin-bottom: 45px;
+}
+
+.profile-img {
+  margin: 20px;
+  border-color: #3594fd;
+  border-width: 0px;
+  border-style: solid;
+  width: 150px;
+  margin-bottom: 0px;
+}
+
+a h1 {
+  color: white;
+}
+
+a:hover h1 {
+  text-transform: none;
+  text-decoration: none;
+}
+
+
+input,
+textarea {
+  margin-bottom: 0.5em;
+  font-size: 0.8em;
+  font-family: proxima-nova-soft, sans-serif;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(221, 221, 221);
+  border-image: initial;
+  background: rgb(255, 255, 255);
+  padding: 0.9em;
+  transition: all 0.3s ease-in-out;
+}
+
+button,
+input {
+  line-height: normal;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+form button,
+form a.button {
+  font-size: 1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgb(53, 145, 115);
+  line-height: 1em;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgb(53, 145, 115);
+  border-image: initial;
+  background: transparent;
+  padding: 0.6em 0.9em;
+  transition: all 0.3s ease-in-out;
+}
+
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+
+blockquote p {
+  display: inline;
+}
+
+.img_center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

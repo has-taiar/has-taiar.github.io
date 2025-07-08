@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High Availability for Azure IoT Edge Devices</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-primary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-secondary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>High Availability for Azure IoT Edge Devices</h2>
+    <p><em>September 01, 2018</em></p>
+    <p><img src="/wp-content/uploads/2018/09/sensor-cloud.png" alt="High Availability for Azure IoT Edge" class="img_center" /> <br /></p>
+<h1>Introduction</h1>
+<p>Azure IoT Edge is a great service from Microsoft Azure that enables us to push analytics and intelligence compute to the Edge. In previous posts, I wrote about <a href="https://www.hasaltaiar.com.au/melbourne-azure-nights-the-age-of-azure-iot-edge/">how we can develop modules to run on the edge</a> as well as <a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge">how to architect and design such solutions</a>. Essentially this will help us in <a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge">operationalising machine learning models</a> and deliver value faster to any Operation Technology team to provide them with intelligence where it matters -on site-. </p>
+<h1>Why High Availability</h1>
+<p>Ok so now we know what Azure IoT Edge is and how to use it, why is it so important to have High Availability for Azure IoT Edge devices? To answer this question, we first need to understand what is the <strong>compute workload</strong> that we are pushing to the Edge. If our compute workload involves interacting with heavy machineries and <code>controlling</code> (directly via means of integration or indirectly by providing advisory dashboards) heavy machineries, then we certainly cant afford to have system breakdown. Such breakdown could impair safety for site workers and in no doubt will cost the business big bucks. This is exactly the case I have with one of my clients where I talked about the design of the solution in a <a href="or provide advisory dashboard to assist in controlling these">previous post</a>. In that post, I showed how we push the outcome of our predictive models to our <a href="https://en.wikipedia.org/wiki/Distributed_control_system">DCS systems</a></p>
+<h2>Azure support for HA on Edge devices</h2>
+<p>Microsoft is spending big money on the Internet of Things technology and tools. Thus, it would be a fair assumption that support for High Availability is coming soon (although the <a href="https://azure.microsoft.com/en-gb/roadmap/azure-iot-edge/">Azure Roadmap website</a> does not mention HA yet). However, if you are hoping to push such systems to production now -like me- then you need to roll out your own solution. And this is why we have this blog post :)</p>
+<h1>Proposed solution</h1>
+<p>Before we delve into the details of the solution, it's worth re-iterating what our solution architecture is. Below, is the solution design diagram I borrowed from my <a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge">previous post</a> on how to operationalise machine learning models on the Azure IoT Edge. </p>
+<p><a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge" target="_blank"><img src="/wp-content/uploads/2018/08/microservices-arch-iot-edge.png" alt="Micro-Services on Azure IoT Edge" class="img_center"/></a> <br />
+<span>My Solution design from <a href="https://www.hasaltaiar.com.au/pushing-micro-services-principles-to-the-azure-iot-edge" target="_blank">last</a> design on how to operationalise machine learning models on the Edge</span></p>
+<p>To be able to have High Availability, we need to have mutliple Azure IoT Edge devices. These devices will have <em>identical</em> workload so that they can replace each other at any point. The remaining issue is how do we ensure that only device is running the compute workload at any point in time? For this reason, we have one device serving as the <code>primary</code> Edge device which is active by default and running the workload. If the <code>primary</code> Edge device goes down, then one of the <code>secondary</code> devices will come up to compensate and run the workload. 
+It's worth mentioning that these devices do not have awareness of this High Availability jazz. This is controlled externally. What the devices see is a <code>flag</code> that controls whether they are active in processing the workload or not. This <code>flag</code> is set in the <code>device twin</code> and controlled remotely using Azure IoT hub. </p>
+<p><img src="/wp-content/uploads/2018/09/azure-iot-edge-high-availability.png" alt="High Availability for Azure IoT Edge" /><br />
+<span>High Availability for Azure IoT Edge</span></p>
+<h2>High Availability Controller</h2>
+<p>The next piece of the buzzle is having a controller that can manage which device(s) are actively running the workload. For this, we can use an Azure Function. The main use of the Function is to check every <code>N</code> minutes if the <code>primary</code> IoT Edge device is running or not. If the device is not running then it will instruct the <code>secondary</code> device to run by setting its <code>flag</code>. Once the <code>flag</code> of the <code>secondary</code> IoT Edge device is set, then this device will start running the compute workload. That's it simple :)
+For checking the device status, the Azure Function uses the following Azure IoT Hub api: </p>
+<pre class="codehilite"><code># https://docs.microsoft.com/en-us/rest/api/iothub/service/getdevice
+# the returned results: 
+{
+  # among other things, we get the followings: 
+  &quot;connectionState&quot;: Connected | Disconnected
+  &quot;connectionStateUpdatedTime:  string
+  &quot;etag&quot;: string    
+  &quot;lastActivityTime&quot;: string
+  &quot;status&quot;: disabled | enabled
+  &quot;statusReason&quot;: string
+  &quot;statusUpdatedTime&quot;: string
+}
+</code></pre>
+
+<h1>Routing Incoming messages</h1>
+<p>An important thing to mention here is that we are not changing the routing of messages to the <code>primary</code> IoT Edge device. This is because in our case here we are using the Edge device for running intelligence workload only. Our IoT Edge device is not serving as a <code>gateway</code>. However, in some senarios, you would need to change the routing of messages to go to the <code>active</code> IoT Edge device. By <code>active</code> here I mean the device that is currently handling the intelligence workload. This can be done with the routing rules in the Azure IoT Hub (<a href="https://docs.microsoft.com/en-us/azure/iot-hub/tutorial-routing">docs can be found here</a>)</p>
+<h1>Consistent Deployment</h1>
+<p>For this High Availability approach to work, we need to make sure that our pool of IoT Edge devices are running identical (the same) deployment of IoT Edge modules and configuration. This is to ensure that when we switch from one device to the other we would not have any surprises. This can be easily achieved by having all deployments going through a Continous Integration and Delievery (CI/CD) server like VSTS. There is a very good documentation and support for configuring CI/CD for IoT Edge modules that you can find on <a href="https://docs.microsoft.com/en-us/azure/iot-edge/how-to-ci-cd">MSDN docs</a>. Again it's important to emphasis that both devices need to have the same deployment that means that the CD builds need to be deploying to a pool of devices (filtered by tag). </p>
+<h1>Conculsion</h1>
+<p>We have looked at what IoT Edge gives us, why do we need High Availability and how can we achieve that in the absense of HA support from Azure. I hope you find this helpful and I would love to hear your feedback and comments if you have any :) </p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>
