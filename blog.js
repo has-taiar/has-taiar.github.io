@@ -50,13 +50,13 @@ function getThumbnail(title) {
 (function() {
   const blogCardsList = document.getElementById('blog-cards-list');
   if (blogCardsList) {
-    // Show top 6 posts as cards
+    // Show top 6 posts as cards, 3 per row
     blogCardsList.innerHTML = '';
     posts.slice(0, 6).forEach(post => {
       const title = post.filename.replace(/^[\d-]+/, '').replace(/-/g, ' ').replace(/\.html$/, '').replace(/\b\w/g, c => c.toUpperCase());
       const url = `blog.html?post=${encodeURIComponent(post.filename)}`;
       const card = document.createElement('div');
-      card.className = 'col-md-6 mb-4';
+      card.className = 'col-md-4 mb-4';
       card.innerHTML = `
         <div class="card h-100">
           <img src="${getThumbnail(title)}" class="card-img-top" alt="Post thumbnail">
@@ -103,7 +103,7 @@ function getThumbnail(title) {
       });
   }
 
-  // Render the list of blog post cards
+  // Render the list of blog post cards (show all posts)
   function renderBlogList() {
     const row = document.createElement('div');
     row.className = 'row';
