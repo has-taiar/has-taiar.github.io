@@ -1,0 +1,17 @@
+{
+    "description": "This repository contains a static website hosted on GitHub Pages. The goal is to modernise the site using best practices in HTML, CSS, JavaScript and Bootstrap, while ensuring it remains responsive and accessible. The site will be refactored to use modular components, improve performance, and enhance SEO. Additionally, GitHub Actions will be integrated for automated deployment.",
+    "goals": [
+        "Improve site responsiveness and accessibility",
+        "Refactor legacy HTML/CSS into modular components",
+        "Add modern UI elements (e.g., animations, dark mode)",
+        "Optimize performance and SEO",
+        "Integrate with GitHub Actions for automated deployment"
+    ],
+    "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Bootstrap"
+    ],
+    "copilot_guidance": "Suggest modern web development practices, refactor legacy code, and help implement responsive design and accessibility improvements."
+}
