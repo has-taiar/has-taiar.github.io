@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <circle cx="120" cy="120" r="120" fill="#1abc9c"/>
+  <circle cx="120" cy="85" r="25" fill="#2c3e50"/>
+  <path d="M120 120 Q90 140 90 170 Q90 190 120 190 Q150 190 150 170 Q150 140 120 120 Z" fill="#2c3e50"/>
+  <text x="120" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#2c3e50">HA</text>
+</svg>

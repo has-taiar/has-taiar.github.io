@@ -1,10 +1,9 @@
-theme: jekyll-theme-cayman
-title: Has AlTaiar
-description: Rambling of an old man on software, life, and stuff
+
+title: Has Altaiar
+description: Occasionally wise, frequently random thoughts on technology, life, and everything in between
 google_analytics: UA-121904616-1
 # url: "https://www.hasaltaiar.com.au" 
 plugins:
-  - jekyll-sitemap
 social-links:
   twitter: https://twitter.com/hasaltaiar
   linkedin: https://www.linkedin.com/in/altaiar

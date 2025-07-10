@@ -2,3 +2,5 @@ _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
+copilot.json
+videos_urls.txt
