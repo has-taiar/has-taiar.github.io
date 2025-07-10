@@ -1,4 +1,4 @@
-// blog.js - Dynamically loads blog posts as cards for the homepage
+// blog.js - Dynamically loads blog posts for blog.html and homepage
 
 const posts = [
   {
@@ -46,46 +46,97 @@ function getThumbnail(title) {
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&size=128&background=random`;
 }
 
-const blogCardsList = document.getElementById('blog-cards-list');
-const showMoreBtn = document.createElement('button');
-showMoreBtn.className = 'btn btn-outline-primary mt-3 w-100';
-showMoreBtn.textContent = 'Show More';
-let visibleCount = 6;
-
-function renderPosts() {
-  blogCardsList.innerHTML = '';
-  posts.slice(0, visibleCount).forEach(post => {
-    const title = post.filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/-/g, ' ').replace(/\.html$/, '').replace(/\b\w/g, c => c.toUpperCase());
-    const url = `blog-posts/${post.filename}`;
-    const card = document.createElement('div');
-    card.className = 'col-md-6 col-lg-4 mb-4';
-    card.innerHTML = `
-      <div class="card h-100">
-        <img src="${getThumbnail(title)}" class="card-img-top" alt="Post thumbnail">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">${title}</h5>
-          <div class="mb-2 text-muted" style="font-size:0.95em;">${post.date}</div>
-          <div class="mb-2">
-            ${post.tags.map(tag => `<span class='badge bg-secondary me-1'>${tag}</span>`).join(' ')}
+// --- Homepage: render top blog posts as cards if #blog-cards-list exists ---
+(function() {
+  const blogCardsList = document.getElementById('blog-cards-list');
+  if (blogCardsList) {
+    // Show top 6 posts as cards
+    blogCardsList.innerHTML = '';
+    posts.slice(0, 6).forEach(post => {
+      const title = post.filename.replace(/^[\d-]+/, '').replace(/-/g, ' ').replace(/\.html$/, '').replace(/\b\w/g, c => c.toUpperCase());
+      const url = `blog.html?post=${encodeURIComponent(post.filename)}`;
+      const card = document.createElement('div');
+      card.className = 'col-md-6 mb-4';
+      card.innerHTML = `
+        <div class="card h-100">
+          <img src="${getThumbnail(title)}" class="card-img-top" alt="Post thumbnail">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${title}</h5>
+            <div class="mb-2 text-muted" style="font-size:0.95em;">${post.date}</div>
+            <div class="mb-2">
+              ${post.tags.map(tag => `<span class='badge bg-secondary me-1'>${tag}</span>`).join(' ')}
+            </div>
+            <p class="card-text mb-2">${post.snippet}</p>
+            <a href="${url}" class="btn btn-primary mt-auto">Read More</a>
           </div>
-          <p class="card-text mb-2">${post.snippet}</p>
-          <a href="${url}" target="_blank" class="btn btn-primary mt-auto">Read More</a>
         </div>
-      </div>
-    `;
-    blogCardsList.appendChild(card);
-  });
-  if (visibleCount < posts.length) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'col-12';
-    wrapper.appendChild(showMoreBtn);
-    blogCardsList.appendChild(wrapper);
+      `;
+      blogCardsList.appendChild(card);
+    });
   }
-}
+})();
 
-showMoreBtn.onclick = function () {
-  visibleCount += 6;
-  renderPosts();
-};
+// --- Dynamic loader for blog.html ---
+(function() {
+  const blogContent = document.getElementById('blog-content');
+  if (!blogContent) return;
+  // Helper to get query param
+  function getQueryParam(name) {
+    const url = new URL(window.location.href);
+    return url.searchParams.get(name);
+  }
 
-renderPosts();
+  // Render a single post fragment into #blog-content
+  function loadPost(postFilename) {
+    blogContent.innerHTML = '<div class="text-center my-5"><div class="spinner-border" role="status"></div></div>';
+    fetch(`blog-posts/${postFilename}`)
+      .then(resp => {
+        if (!resp.ok) throw new Error('Not found');
+        return resp.text();
+      })
+      .then(html => {
+        blogContent.innerHTML = html + '<div class="mt-4"><a href="blog.html" class="btn btn-outline-secondary">&larr; Back to Blog List</a></div>';
+        window.scrollTo(0, 0);
+      })
+      .catch(() => {
+        blogContent.innerHTML = '<div class="alert alert-danger mt-5">Blog post not found.</div>';
+      });
+  }
+
+  // Render the list of blog post cards
+  function renderBlogList() {
+    const row = document.createElement('div');
+    row.className = 'row';
+    posts.forEach(post => {
+      const title = post.filename.replace(/^[\d-]+/, '').replace(/-/g, ' ').replace(/\.html$/, '').replace(/\b\w/g, c => c.toUpperCase());
+      const url = `blog.html?post=${encodeURIComponent(post.filename)}`;
+      const card = document.createElement('div');
+      card.className = 'col-md-6 col-lg-4 mb-4';
+      card.innerHTML = `
+        <div class="card h-100">
+          <img src="${getThumbnail(title)}" class="card-img-top" alt="Post thumbnail">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${title}</h5>
+            <div class="mb-2 text-muted" style="font-size:0.95em;">${post.date}</div>
+            <div class="mb-2">
+              ${post.tags.map(tag => `<span class='badge bg-secondary me-1'>${tag}</span>`).join(' ')}
+            </div>
+            <p class="card-text mb-2">${post.snippet}</p>
+            <a href="${url}" class="btn btn-primary mt-auto">Read More</a>
+          </div>
+        </div>
+      `;
+      row.appendChild(card);
+    });
+    blogContent.innerHTML = '';
+    blogContent.appendChild(row);
+  }
+
+  // Main logic
+  const postParam = getQueryParam('post');
+  if (postParam) {
+    loadPost(postParam);
+  } else {
+    renderBlogList();
+  }
+})();
