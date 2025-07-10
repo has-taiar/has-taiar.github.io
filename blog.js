@@ -2,10 +2,10 @@
 
 const posts = [
   {
-    filename: "2019-07-18-mlops_on_azure_by_rolf_tesmer.html",
+    filename: "2019-07-18-reference-architecture-for-mlops-and-aiops.html",
     date: "2019-07-18",
     tags: ["AI", "MLOps", "Azure"],
-    snippet: "A practical look at MLOps on Azure, featuring Rolf Tesmer's insights and real-world examples."
+    snippet: "A practical look at AIOps and MLOps on Azure, featuring Rolf Tesmer's insights and real-world examples."
   },
   {
     filename: "2019-05-20-microsoft-build-2019-updates.html",
@@ -83,7 +83,7 @@ function renderPosts() {
   }
 }
 
-showMoreBtn.onclick = function() {
+showMoreBtn.onclick = function () {
   visibleCount += 6;
   renderPosts();
 };
