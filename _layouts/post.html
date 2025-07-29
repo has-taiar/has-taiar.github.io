@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<h3>{{ page.title }}</h3>
+<p>{{ page.date | date: '%B %d, %Y' }}</p>
+
+<span><b>Tags</b>: 
+  {% for tag in page.tags %}
+    {% capture tag_name %}{{ tag }}{% endcapture %}
+    <a href="/tag/{{ tag_name }}"><code class="highligher-rouge"><nobr>{{ tag_name }}</nobr></code>&nbsp;</a>
+  {% endfor %}
+</span>
+
+{{ content }}
+
+<p>If you have a comment, feedback or a question, I would love to <a href="/contact.html">hear from you</a></p>
