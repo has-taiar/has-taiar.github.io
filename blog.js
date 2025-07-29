@@ -2,10 +2,10 @@
 
 const posts = [
   {
-    filename: "2019-07-18-reference-architecture-for-mlops-and-aiops.html",
-    date: "2019-07-18",
+    filename: "2025-07-29-microsfot-copilot-tuning-presentation-at-microsoft-copilot-user-group.html",
+    date: "2025-07-29",
     tags: ["AI", "MLOps", "Azure"],
-    snippet: "A practical look at AIOps and MLOps on Azure, featuring Rolf Tesmer's insights and real-world examples."
+    snippet: "A practical look at Microsoft Copilot Tuning, featuring insights and real-world examples."
   },
   {
     filename: "2019-05-20-microsoft-build-2019-updates.html",
@@ -47,7 +47,7 @@ function getThumbnail(title) {
 }
 
 // --- Homepage: render top blog posts as cards if #blog-cards-list exists ---
-(function() {
+(function () {
   const blogCardsList = document.getElementById('blog-cards-list');
   if (blogCardsList) {
     // Show top 6 posts as cards, 3 per row
@@ -77,7 +77,7 @@ function getThumbnail(title) {
 })();
 
 // --- Dynamic loader for blog.html ---
-(function() {
+(function () {
   const blogContent = document.getElementById('blog-content');
   if (!blogContent) return;
   // Helper to get query param
