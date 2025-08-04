@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Has Altaiar</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  
+  <!-- Font Awesome icons -->
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/freelancer-style.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav id="mainNav" class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Has Altaiar</a>
+      <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item mx-0 mx-lg-1">
+            <a class="nav-link py-3 px-0 px-lg-3 rounded" href="index.html">Home</a>
+          </li>
+          <li class="nav-item mx-0 mx-lg-1">
+            <a class="nav-link py-3 px-0 px-lg-3 rounded" href="about.html">About</a>
+          </li>
+          <li class="nav-item mx-0 mx-lg-1">
+            <a class="nav-link py-3 px-0 px-lg-3 rounded active" href="contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contact Section -->
+  <section id="contact" class="page-section" style="padding-top: calc(6rem + 74px);">
+    <div class="container">
+      <!-- Contact Section Heading -->
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact Me</h2>
+      <!-- Icon Divider -->
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="divider-custom-line"></div>
+      </div>
+      <!-- Contact Section Form -->
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+          <p class="lead text-center mb-5">Ready to start your next project? Send me a message and I will get back to you as soon as possible!</p>
+          
+          <!-- Contact Form -->
+          <form method="POST" action="https://formspree.io/f/has.altaiar@gmail.com" class="needs-validation" novalidate>
+            <!-- Name input -->
+            <div class="form-floating mb-3">
+              <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required>
+              <label for="name">Full name</label>
+              <div class="invalid-feedback">A name is required.</div>
+            </div>
+            
+            <!-- Email address input -->
+            <div class="form-floating mb-3">
+              <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" required>
+              <label for="email">Email address</label>
+              <div class="invalid-feedback">An email is required.</div>
+            </div>
+            
+            <!-- Phone number input -->
+            <div class="form-floating mb-3">
+              <input class="form-control" id="phone" name="phone" type="tel" placeholder="(123) 456-7890">
+              <label for="phone">Phone number (optional)</label>
+            </div>
+            
+            <!-- Message input -->
+            <div class="form-floating mb-3">
+              <textarea class="form-control" id="message" name="message" placeholder="Enter your message here..." style="height: 10rem;" required></textarea>
+              <label for="message">Message</label>
+              <div class="invalid-feedback">A message is required.</div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Send</button>
+            
+            <!-- Hidden fields for Formspree -->
+            <input type="hidden" name="_next" value="thanks.html">
+            <input type="hidden" name="_subject" value="Website Contact Form Submission">
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer text-center">
+    <div class="container">
+      <div class="row">
+        <!-- Footer Location -->
+        <div class="col-lg-4 mb-5 mb-lg-0">
+          <h4 class="text-uppercase mb-4">Location</h4>
+          <p class="lead mb-0">
+            Melbourne, Australia<br>
+            Available for Global Consulting
+          </p>
+        </div>
+        <!-- Footer Social Icons -->
+        <div class="col-lg-4 mb-5 mb-lg-0">
+          <h4 class="text-uppercase mb-4">Around the Web</h4>
+          <a class="btn btn-outline-light btn-social mx-1" href="#!">
+            <i class="fab fa-fw fa-linkedin-in"></i>
+          </a>
+          <a class="btn btn-outline-light btn-social mx-1" href="#!">
+            <i class="fab fa-fw fa-twitter"></i>
+          </a>
+          <a class="btn btn-outline-light btn-social mx-1" href="#!">
+            <i class="fab fa-fw fa-github"></i>
+          </a>
+          <a class="btn btn-outline-light btn-social mx-1" href="#!">
+            <i class="fab fa-fw fa-youtube"></i>
+          </a>
+        </div>
+        <!-- Footer About Text -->
+        <div class="col-lg-4">
+          <h4 class="text-uppercase mb-4">About This Site</h4>
+          <p class="lead mb-0">
+            Sharing insights on cloud technologies, AI, and digital transformation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Copyright Section -->
+  <div class="copyright py-4 text-center text-white">
+    <div class="container">
+      <small>Copyright &copy; Has Altaiar 2025</small>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JS -->
+  <script src="assets/js/freelancer-scripts.js"></script>
+  
+  <!-- Form validation script -->
+  <script>
+    // Bootstrap validation
+    (() => {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
+</body>
+
+</html>

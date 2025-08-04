@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Push Notifications to all platforms using a web Api (C# and .Net)</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <header class="container py-3">
+    <h1>Has AlTaiar</h1>
+    <nav>
+      <a href="../index.html" class="btn btn-secondary">Home</a>
+      <a href="../about.html" class="btn btn-secondary">About</a>
+      <a href="../speaking.html" class="btn btn-secondary">Speaking</a>
+      <a href="../books.html" class="btn btn-secondary">Books</a>
+      <a href="../contact.html" class="btn btn-secondary">Contact</a>
+      <a href="../blog.html" class="btn btn-primary">Blog</a>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <h2>Push Notifications to all platforms using a web Api (C# and .Net)</h2>
+    <p><em>January 13, 2014</em></p>
+    <h2>UPDATE 07/01/2015</h2>
+<p>This blog post was written a long time back. At the time, I could not find a free platform for sending push notifications to multiple mobile platforms. Thus, I forked PushSharp and started wrapping it in a web app. Since then, many similar services have come light. Microsoft Azure does currently provide a similar platform and the cost is quite reasonable. The content here still valid if you are interested in building your own notification server to save on cost. For more info about Azure Push Notifications, see <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-dotnet-backend-ios-get-started-push/" title="Azure Documentation - Mobile Services .NET backend and iOS Get Started with Push Notifications" target="_blank">this on MSDN</a></p>
+<p>This post shows how to use <a href="https://github.com/has-taiar/PushSharp.Web" target="_blank">PushSharp.Web</a> to send push notifications from anywhere using a Web Api wrapper around lovely <a href="https://github.com/Redth/PushSharp" target="_blank">PushSharp</a>.</p>
+<p><img class="size-full wp-image-441" alt="PushSharp" src="https://www.hasaltaiar.com.au/wp-content/uploads/2014/01/PushSharp-Diagram.png" width="501" height="386" /><br />
+<span>PushSharp library</span> </p>
+<p>Recently, I was tasked to implement a Push Notification teir on our Server end when certain conditions are met.</p>
+<p>I needed to send Push Notifications to iOS, Android, and Windows Phones.</p>
+<p>After doing some investigation, I found that <a href="https://github.com/Redth/PushSharp" target="_blank">PushSharp </a>was the best candidate available to help me send to multiple platforms in one languages.</p>
+<p>The Problem was my sever application was using .NET 3.5 CF, and we cannot update just yet. We still support lots of apps that are operating on Windows Mobile 6, and that was the catch. PushSharp needs .Net either 4.0 or 4.5 to work, that is because it uses many of .NET 4.0 libraries such as TPL (Task Parallel Library). I thought of few other solutions like making the PushSharp a windows phone and getting my app to talk to it via some interop channels, but I thought that was going back.</p>
+<p>Thus, I ended up creating a new WebApi that acts as a wrapper around PushSharp. That way, the PushNotifications can be separate and I can use the same WebApi to build more functionality that is not available for me in .NET 3.5. Having said that, This WebApi can be used with any other platform or language. The fact that it exposes the sending of Push Notifications as a webApi service makes it available for any platform or language that you are using.</p>
+<p>You could use it from PHP, Ruby, etc.</p>
+<p>The whole source code is available under <a href="https://github.com/has-taiar/PushSharp.Web" target="_blank">GitHub</a>, have a look and feel free to fork and do whatever you like with it.</p>
+<p>Few things to note:</p>
+<ol>
+<li>
+<p>Apple Certificate settings need to be set in the Web.Config before hand. (if you plan to send to iOS devices)</p>
+</li>
+<li>
+<p>Google Api key needs to be set in the Web.Config (if you intend to send to Android Devices)</p>
+</li>
+<li>
+<p>Same with other platforms like Windows Phone, and Windows Store settings.</p>
+</li>
+<li>
+<p>The WebApi app makes use of NLog, so the config file is separate from the Web.Config and you could update it to your needs.</p>
+</li>
+</ol>
+<p>I would love to hear your thoughts about how great or terrible job I have done. If you like it, please do get in touch by leaving a comment down this page.</p>
+  </main>
+  <footer class="container py-4 text-center">
+    <hr>
+    <p>&copy; 2025 Has AlTaiar</p>
+  </footer>
+</body>
+</html>
