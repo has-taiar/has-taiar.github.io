@@ -2,6 +2,12 @@
 
 const posts = [
   {
+    filename: "2025-08-04-rethinking-ai-integration-mcp-and-a2a.html",
+    date: "2025-08-04",
+    tags: ["AI", "MCP", "A2A", "Integration", "Protocols"],
+    snippet: "Exploring two emerging protocols—Model Context Protocol (MCP) and Agent-to-Agent (A2A)—that promise to reshape how we build, secure, and scale AI systems."
+  },
+  {
     filename: "2025-07-29-microsfot-copilot-tuning-presentation-at-microsoft-copilot-user-group.html",
     date: "2025-07-29",
     tags: ["AI", "MLOps", "Azure"],
